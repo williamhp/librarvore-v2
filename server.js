@@ -135,8 +135,12 @@ app.get('/login', (_, res) => res.redirect('/01-login.html'));
 app.get('/acervo', (_, res) => res.redirect('/03-acervo.html'));
 
 // ---------- Start ----------
-initDb()
-    .then(() => app.listen(PORTA, '0.0.0.0', () => {
-        console.log('✅ Servidor na porta ' + PORTA);
-    }))
-    .catch(e => console.error('❌ Erro fatal:', e.message));
+// ---------- Start ----------
+app.listen(PORTA, '0.0.0.0', () => {
+    console.log('✅ Servidor rodando na porta ' + PORTA);
+    
+    // Tenta inicializar o banco em background, sem travar o servidor
+    initDb()
+        .then(() => console.log('✅ Banco de dados inicializado com sucesso'))
+        .catch(e => console.error('❌ Erro ao inicializar banco:', e.message));
+});

@@ -6,7 +6,7 @@ const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
 const { promisify } = require('util');
-const pool = require('./db');
+
 
 const app = express();
 const PORTA = Number(process.env.PORT) || 3000;

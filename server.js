@@ -1,6 +1,7 @@
-require('dotenv').config();
-const crypto = require('crypto');
+require('dotenv').config();          // <-- PRIMEIRA LINHA
 const express = require('express');
+// ...
+const pool = require('./db');        // <-- SÓ DEPOIS de dotenv
 const session = require('express-session');
 const multer = require('multer');
 const path = require('path');

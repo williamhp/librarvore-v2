@@ -1,0 +1,39 @@
+<!-- ===== PARTIAL: cabecalho (breadcrumb + busca + menu do perfil) ===== -->
+        <header class="us-cabecalho">
+          <p class="us-cabecalho__breadcrumb">Início  ›  (página atual)</p>
+          <div class="us-cabecalho__linha">
+            <label for="us-menu-toggle" class="us-hamburger">
+              <span class="us-sr-only">Abrir menu lateral</span>
+              <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>
+            </label>
+
+            <!-- BACK-END: busca por título/autor. Envia GET para o Acervo (?q=...) -->
+            <form class="us-busca" role="search" action="03-acervo.html" method="get">
+              <label class="us-sr-only" for="us-busca-campo">Buscar livro</label>
+              <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-busca"/></svg>
+              <input class="us-busca__campo" id="us-busca-campo" type="search" name="q" placeholder="Digite o nome do livro" autocomplete="off">
+            </form>
+
+            <!-- Menu do perfil: abre/fecha ao clicar na foto (assets/js/menu-perfil.js) -->
+            <div class="us-perfil-menu" data-perfil-menu>
+              <button class="us-perfil" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="us-perfil-painel" data-perfil-botao>
+                <!-- BACK-END: foto do usuário. Troque o span por <img class="us-perfil__avatar" src="..." alt=""> -->
+                <span class="us-perfil__avatar" aria-hidden="true">V</span>
+                <span class="us-perfil__nome">Victor</span><!-- BACK-END: nome do usuário logado -->
+                <svg class="us-icone us-icone--seta" aria-hidden="true" focusable="false"><use href="#i-baixo"/></svg>
+              </button>
+              <div class="us-perfil-painel" id="us-perfil-painel">
+                <ul role="menu">
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="07-meu-perfil.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-usuario"/></svg>Meu perfil</a></li>
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="08-configuracoes.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-configuracoes"/></svg>Configurações</a></li>
+                </ul>
+                <hr class="us-perfil-painel__divisor">
+                <ul role="menu">
+                  <!-- BACK-END: trocar por rota/ação de logout (encerrar sessão) -->
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="01-login.html" data-acao="sair"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-sair"/></svg>Sair da conta</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!-- ===== FIM PARTIAL: cabecalho ===== -->

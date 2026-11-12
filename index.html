@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Librárvore · Todas as telas</title>
+<style>
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,sans-serif;color:#513618;background:#fef5d3;height:100vh;display:flex}
+  nav{width:290px;flex:none;padding:20px 16px;background:#fffae6;border-right:1px solid rgba(81,54,24,.15);overflow:auto}
+  h1{font-size:20px;margin:0 0 4px} p{font-size:13px;margin:0 0 16px;opacity:.8}
+  ol{list-style:none;margin:0;padding:0} li{margin:2px 0}
+  a{display:block;padding:9px 12px;border-radius:8px;color:inherit;text-decoration:none;font-size:15px}
+  a:hover{background:rgba(217,165,68,.2)} a.ativo{background:rgba(217,165,68,.35);font-weight:600}
+  .abrir{margin-top:16px;font-size:13px;text-decoration:underline}
+  iframe{flex:1;border:0;background:#fff;min-width:0}
+  @media(max-width:760px){body{flex-direction:column}nav{width:100%;max-height:38vh;border-right:0;border-bottom:1px solid rgba(81,54,24,.15)}}
+</style>
+</head>
+<body>
+  <nav>
+    <h1>Librárvore</h1>
+    <p>Todas as telas, na ordem do fluxo. Clique para visualizar. Use <strong>Preferências de leitura</strong> para trocar o tema e o tamanho do texto em todo o site.</p>
+    <ol>
+      <li><a href="01-login.html" target="tela">01 · Login</a></li>
+      <li><a href="02-esqueci-senha.html" target="tela">02 · Esqueci minha senha</a></li>
+      <li><a href="03-nova-senha.html" target="tela">03 · Nova senha</a></li>
+      <li><a href="04-inicio.html" target="tela">04 · Início</a></li>
+      <li><a href="05-acervo.html" target="tela">05 · Acervo</a></li>
+      <li><a href="06-minha-lista.html" target="tela">06 · Minha Lista</a></li>
+      <li><a href="07-continuar-lendo.html" target="tela">07 · Continuar lendo</a></li>
+      <li><a href="08-detalhes-livro.html" target="tela">08 · Detalhes do livro</a></li>
+      <li><a href="09-leitura.html" target="tela">09 · Leitura do livro</a></li>
+      <li><a href="10-meu-perfil.html" target="tela">10 · Meu perfil</a></li>
+      <li><a href="11-configuracoes.html" target="tela">11 · Configurações</a></li>
+      <li><a href="12-preferencias-leitura.html" target="tela">12 · Preferências de leitura</a></li>
+    </ol>
+    <a class="abrir" href="01-login.html" target="_blank">Abrir o site em tela cheia</a>
+  </nav>
+  <iframe name="tela" src="01-login.html" title="Visualização da tela"></iframe>
+  <script>
+    document.querySelectorAll('nav ol a').forEach(function(a){a.addEventListener('click',function(){document.querySelectorAll('nav ol a').forEach(function(x){x.classList.remove('ativo')});a.classList.add('ativo');});});
+    document.querySelector('nav ol a').classList.add('ativo');
+  </script>
+</body>
+</html>
+

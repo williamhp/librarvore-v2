@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Início | Librárvore</title>
+
+  <!-- Fonte do design: Hind 400 / 500 / 600 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- CSS compartilhado (todas as classes têm prefixo "us-") -->
+  <link rel="stylesheet" href="../assets/css/librarvore.css">
+  <link rel="stylesheet" href="../assets/css/telas.css">
+  <link rel="stylesheet" href="../tema.css">
+  <script src="../assets/preferencias.js"></script>
+</head>
+
+<body class="us-page">
+
+  <!-- ===== PARTIAL: sprite-icones (colar logo após <body>) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-estrela" viewBox="0 0 16 16"><polygon points="8 1 10.1 5.6 15 6.2 11.4 9.5 12.3 14.5 8 12 3.7 14.5 4.6 9.5 1 6.2 5.9 5.6" fill="currentColor"/></symbol>
+      <symbol id="i-casa" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></symbol>
+      <symbol id="i-livro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></g></symbol>
+      <symbol id="i-coracao" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></g></symbol>
+      <symbol id="i-marcador" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></g></symbol>
+      <symbol id="i-lampada" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></g></symbol>
+      <symbol id="i-busca" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g></symbol>
+      <symbol id="i-baixo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></g></symbol>
+      <symbol id="i-direita" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></g></symbol>
+      <symbol id="i-esquerda" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></g></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></g></symbol>
+      <symbol id="i-lixeira" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><path d="M10 11v6M14 11v6"/></g></symbol>
+      <symbol id="i-usuario" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></g></symbol>
+      <symbol id="i-configuracoes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></g></symbol>
+      <symbol id="i-sair" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></g></symbol>
+    </defs>
+  </svg>
+  <!-- ===== FIM PARTIAL: sprite-icones ===== -->
+
+  <!-- Controle do menu lateral em telas pequenas (só CSS) -->
+  <input type="checkbox" id="us-menu-toggle" class="us-menu-toggle" aria-label="Abrir ou fechar o menu lateral">
+  <a class="us-pular" href="#us-conteudo">Ir para o conteúdo</a>
+
+  <div class="us-layout">
+
+    <!-- ===== PARTIAL: menu-lateral ===== -->
+    <aside class="us-sidebar" id="us-menu">
+      <a class="us-sidebar__logo" href="02-inicio.html" aria-label="Librárvore - página inicial">
+        <img class="us-logo--claro" src="../assets/img/logo-librarvore-colorida.png" alt="Librárvore - Livraria + Biblioteca" height="109">
+        <img class="us-logo--escuro" src="../assets/img/logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="170" height="58">
+      </a>
+      <nav class="us-menu" aria-label="Menu lateral">
+        <div class="us-menu__grupo">
+          <p class="us-menu__titulo">Descubra seu Livro <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-baixo"/></svg></p>
+          <ul class="us-menu__lista">
+            <li><a class="us-menu__item us-menu__item--ativo" aria-current="page" href="02-inicio.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>Início</a></li>
+            <li><a class="us-menu__item" href="03-acervo.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-livro"/></svg>Acervo</a></li>
+          </ul>
+        </div>
+        <hr class="us-menu__divisor">
+        <div class="us-menu__grupo">
+          <p class="us-menu__titulo">Seu Acervo <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-baixo"/></svg></p>
+          <ul class="us-menu__lista">
+            <li><a class="us-menu__item" href="04-minha-lista.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg>Minha Lista</a></li>
+            <li><a class="us-menu__item" href="05-continuar-lendo.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-marcador"/></svg>Continuar lendo</a></li>
+            <li><a class="us-menu__item" href="02-inicio.html#us-t-sugestoes"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-lampada"/></svg>Sugestão de Leitura</a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+    <label for="us-menu-toggle" class="us-fundo-menu" aria-hidden="true"></label>
+    <!-- ===== FIM PARTIAL: menu-lateral ===== -->
+
+    <div class="us-conteudo">
+      <main id="us-conteudo">
+
+        <div class="us-destaque">
+        <!-- ===== PARTIAL: cabecalho (breadcrumb + busca + menu do perfil) ===== -->
+        <header class="us-cabecalho">
+          <p class="us-cabecalho__breadcrumb">Início</p>
+          <div class="us-cabecalho__linha">
+            <label for="us-menu-toggle" class="us-hamburger">
+              <span class="us-sr-only">Abrir menu lateral</span>
+              <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>
+            </label>
+
+            <!-- BACK-END: busca por título/autor. Envia GET para o Acervo (?q=...) -->
+            <form class="us-busca" role="search" action="03-acervo.html" method="get">
+              <label class="us-sr-only" for="us-busca-campo">Buscar livro</label>
+              <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-busca"/></svg>
+              <input class="us-busca__campo" id="us-busca-campo" type="search" name="q" placeholder="Digite o nome do livro" autocomplete="off">
+              <button class="us-busca__botao" type="submit" aria-label="Pesquisar livro">
+                <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-busca"/></svg>
+              </button>
+            </form>
+
+            <!-- Menu do perfil: abre/fecha ao clicar na foto (assets/js/menu-perfil.js) -->
+            <div class="us-perfil-menu" data-perfil-menu>
+              <button class="us-perfil" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="us-perfil-painel" data-perfil-botao>
+                <!-- BACK-END: foto do usuário. Troque o span por <img class="us-perfil__avatar" src="..." alt=""> -->
+                <span class="us-perfil__avatar" aria-hidden="true">V</span>
+                <span class="us-perfil__nome">Victor</span><!-- BACK-END: nome do usuário logado -->
+                <svg class="us-icone us-icone--seta" aria-hidden="true" focusable="false"><use href="#i-baixo"/></svg>
+              </button>
+              <div class="us-perfil-painel" id="us-perfil-painel">
+                <ul role="menu">
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="07-meu-perfil.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-usuario"/></svg>Meu perfil</a></li>
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="08-configuracoes.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-configuracoes"/></svg>Configurações</a></li>
+                </ul>
+                <hr class="us-perfil-painel__divisor">
+                <ul role="menu">
+                  <!-- BACK-END: trocar por rota/ação de logout (encerrar sessão) -->
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="01-login.html" data-acao="sair"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-sair"/></svg>Sair da conta</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!-- ===== FIM PARTIAL: cabecalho ===== -->
+
+<section class="us-sugestoes" aria-labelledby="us-t-sugestoes">
+            <h2 class="us-titulo us-titulo--claro" id="us-t-sugestoes"><a href="03-acervo.html">Sugestão para Leitura <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-direita"/></svg></a></h2>
+            <ul class="us-lista-cards">
+        <li>
+          <article class="us-card-livro us-card-livro--vidro">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--vidro">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--vidro">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--vidro">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--vidro">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+            </ul>
+          </section>
+        </div>
+
+      <!-- Continuar Lendo -->
+      <section class="us-secao" aria-labelledby="us-t-continuar">
+        <div class="us-secao__topo">
+          <h2 class="us-titulo" id="us-t-continuar"><a href="05-continuar-lendo.html">Continuar Lendo <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-direita"/></svg></a></h2>
+          <div class="us-setas">
+            <button class="us-seta" type="button" data-carrossel="#us-prat-continuar" data-direcao="-1" aria-label="Anterior"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-esquerda"/></svg></button>
+            <button class="us-seta" type="button" data-carrossel="#us-prat-continuar" data-direcao="1" aria-label="Próximo"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-direita"/></svg></button>
+          </div>
+        </div>
+        <ul class="us-prateleira" id="us-prat-continuar">
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-progresso" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-label="Progresso de leitura"><span class="us-progresso__barra" style="width:75%"></span></div>
+              <p class="us-capa-prat__texto">75% Lido</p>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-progresso" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-label="Progresso de leitura"><span class="us-progresso__barra" style="width:75%"></span></div>
+              <p class="us-capa-prat__texto">75% Lido</p>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-progresso" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-label="Progresso de leitura"><span class="us-progresso__barra" style="width:75%"></span></div>
+              <p class="us-capa-prat__texto">75% Lido</p>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-progresso" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-label="Progresso de leitura"><span class="us-progresso__barra" style="width:75%"></span></div>
+              <p class="us-capa-prat__texto">75% Lido</p>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-progresso" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" aria-label="Progresso de leitura"><span class="us-progresso__barra" style="width:75%"></span></div>
+              <p class="us-capa-prat__texto">75% Lido</p>
+          </a>
+        </li>
+        </ul>
+      </section>
+
+      <!-- Novidade no Acervo -->
+      <section class="us-secao" aria-labelledby="us-t-novidades">
+        <h2 class="us-titulo" id="us-t-novidades"><a href="03-acervo.html">Novidade no Acervo <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-direita"/></svg></a></h2>
+        <ul class="us-lista-cards">
+        <li>
+          <article class="us-card-livro us-card-livro--verde">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--verde">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--verde">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--verde">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        <li>
+          <article class="us-card-livro us-card-livro--verde">
+            <a class="us-card-livro__link" href="06-detalhes-livro.html">
+              <div class="us-capa" role="img" aria-label="Capa do livro"><!-- TODO: <img src="capa.jpg" alt="Capa de ..."> --></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-livro__titulo">Nome do Livro</h3>
+              <p class="us-card-livro__autor">Escritor do livro</p>
+            </a>
+          </article>
+        </li>
+        </ul>
+      </section>
+
+      <!-- Melhores Avaliados -->
+      <section class="us-secao" aria-labelledby="us-t-melhores">
+        <h2 class="us-titulo" id="us-t-melhores"><a href="03-acervo.html">Melhores Avaliados <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-direita"/></svg></a></h2>
+        <ul class="us-prateleira">
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+          </a>
+        </li>
+        <li class="us-capa-prat">
+          <a class="us-capa-prat__link" href="06-detalhes-livro.html">
+            <div class="us-capa us-capa--prateleira" role="img" aria-label="Capa do livro"></div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+          </a>
+        </li>
+        </ul>
+      </section>
+
+      <!-- Explore por Categorias -->
+      <section class="us-secao" aria-labelledby="us-t-categorias">
+        <h2 class="us-titulo" id="us-t-categorias"><a href="03-acervo.html">Explore por Categorias <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-direita"/></svg></a></h2>
+        <ul class="us-grade-categorias"><!-- BACK-END: categorias vindas do banco; link para o Acervo filtrado (?categoria=...) -->
+        <li><a class="us-categoria us-categoria--1" href="03-acervo.html"><span>Direito</span></a></li>
+        <li><a class="us-categoria us-categoria--2" href="03-acervo.html"><span>Educação</span></a></li>
+        <li><a class="us-categoria us-categoria--3" href="03-acervo.html"><span>Saúde</span></a></li>
+        <li><a class="us-categoria us-categoria--4" href="03-acervo.html"><span>Administração</span></a></li>
+        <li><a class="us-categoria us-categoria--5" href="03-acervo.html"><span>Tecnologia</span></a></li>
+        <li><a class="us-categoria us-categoria--6" href="03-acervo.html"><span>Literatura</span></a></li>
+        <li><a class="us-categoria us-categoria--7" href="03-acervo.html"><span>Ciências</span></a></li>
+        <li><a class="us-categoria us-categoria--8" href="03-acervo.html"><span>História</span></a></li>
+        </ul>
+      </section>
+
+      <!-- Meta de leitura -->
+      <section class="us-secao us-secao--meta" aria-labelledby="us-t-meta">
+        <div class="us-banner">
+          <div class="us-banner__painel">
+            <h2 class="us-banner__titulo" id="us-t-meta">Defina sua meta de leitura</h2>
+            <a class="us-botao" href="#">Configurar minha meta</a><!-- TODO: rota/ação da meta -->
+          </div>
+        </div>
+      </section>
+
+
+
+      </main>
+
+      <!-- ===== PARTIAL: rodape ===== -->
+      <footer class="us-rodape">
+        <div class="us-rodape__linha">
+          <a href="04-inicio.html" aria-label="Librárvore - página inicial"><img class="us-rodape__logo" src="assets/img/logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" height="75"></a>
+          <nav aria-label="Rodapé">
+            <ul class="us-rodape__links">
+              <li><a href="04-inicio.html">Início</a></li>
+              <li><a href="05-acervo.html">Acervo</a></li>
+              <li><a href="#">Sobre</a></li><!-- TODO: rota -->
+              <li><a href="#">Contato</a></li><!-- TODO: rota -->
+            </ul>
+          </nav>
+        </div>
+        <hr class="us-rodape__divisor">
+        <p class="us-rodape__copy">© 2026 Librárvore. Todos os direitos reservados.</p>
+      </footer>
+      <!-- ===== FIM PARTIAL: rodape ===== -->
+    </div>
+  </div>
+
+  <script src="../assets/js/carrossel.js"></script>
+  <script src="../assets/js/menu-perfil.js"></script>
+  <script>
+    function atualizarUsuarioLogado(usuario) {
+      const nome = String(usuario || 'Usuário').trim();
+      document.querySelectorAll('.us-perfil__nome').forEach((el) => {
+        el.textContent = nome;
+      });
+      document.querySelectorAll('.us-perfil__avatar').forEach((el) => {
+        el.textContent = nome ? nome.charAt(0).toUpperCase() : 'U';
+      });
+    }
+
+    async function obterUsuarioAtual() {
+      try {
+        const resposta = await fetch('/api/perfil');
+        if (!resposta.ok) return 'Usuário';
+        const dados = await resposta.json();
+        return dados.login || dados.usuario || 'Usuário';
+      } catch (erro) {
+        return 'Usuário';
+      }
+    }
+
+    function escaparTexto(valor) {
+      return String(valor ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    const paletasCapa = [
+      ['#4F46E5', '#7C3AED'],
+      ['#0F766E', '#34D399'],
+      ['#F59E0B', '#F97316'],
+      ['#EC4899', '#8B5CF6'],
+      ['#14B8A6', '#2563EB'],
+      ['#DC2626', '#F59E0B']
+    ];
+
+    function montarCapaLivro(titulo, indice = 0) {
+      const texto = String(titulo || 'L').trim();
+      const iniciais = texto.split(/\s+/).slice(0, 2).map((parte) => parte.charAt(0).toUpperCase()).join('').slice(0, 2) || 'L';
+      const [inicio, fim] = paletasCapa[indice % paletasCapa.length];
+
+      return `
+        <div class="us-capa" role="img" aria-label="Capa do livro ${escaparTexto(titulo || 'Livro')}" style="background:linear-gradient(135deg, ${inicio}, ${fim}); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; letter-spacing:0.08em; font-size:1.8rem; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);">
+          <span>${iniciais}</span>
+        </div>
+      `;
+    }
+
+    function criarUrlDetalhes(livro, usuario) {
+      const params = new URLSearchParams({
+        isbn: livro.isbn || '',
+        titulo: livro.titulo || 'Livro',
+        autor: livro.autor || 'Autor Desconhecido',
+        usuario: usuario || 'Usuário'
+      });
+      return `06-detalhes-livro.html?${params.toString()}`;
+    }
+
+    function getListaPorSecao(id) {
+      const secao = document.querySelector(`#${id}`)?.closest('.us-secao');
+      return secao ? secao.querySelector('.us-lista-cards, .us-prateleira') : null;
+    }
+
+    function renderizarLivrosEmGrade(lista, livros, usuario, classeCard = 'us-card-livro--vidro') {
+      if (!lista) return;
+
+      if (!Array.isArray(livros) || !livros.length) {
+        lista.innerHTML = '<li class="us-vazio__texto">Nenhum livro disponível no momento.</li>';
+        return;
+      }
+
+      const html = livros.map((livro, indice) => {
+        const titulo = escaparTexto(livro.titulo || 'Livro sem título');
+        const autor = escaparTexto(livro.autor || 'Autor desconhecido');
+        const href = criarUrlDetalhes(livro, usuario);
+
+        return `
+          <li>
+            <article class="us-card-livro ${classeCard}">
+              <a class="us-card-livro__link" href="${href}">
+                ${montarCapaLivro(livro.titulo || 'Livro', indice)}
+                <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas">
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <span class="us-avaliacao__qtd">(5)</span>
+                </div>
+                <h3 class="us-card-livro__titulo">${titulo}</h3>
+                <p class="us-card-livro__autor">${autor}</p>
+              </a>
+            </article>
+          </li>
+        `;
+      }).join('');
+
+      lista.innerHTML = html;
+    }
+
+    function renderizarLivrosEmPrateleira(lista, livros, usuario, opcoes = {}) {
+      if (!lista) return;
+
+      if (!Array.isArray(livros) || !livros.length) {
+        lista.innerHTML = '<li class="us-vazio__texto">Nenhum livro em andamento.</li>';
+        return;
+      }
+
+      const { mostrarProgresso = false } = opcoes;
+
+      lista.innerHTML = livros.map((livro, indice) => {
+        const titulo = livro.titulo || 'Livro';
+        const autor = livro.autor || 'Autor';
+        const progresso = Math.max(0, Math.min(100, Number(livro.progresso) || 0));
+        const href = criarUrlDetalhes({ isbn: livro.isbn || '', titulo, autor }, usuario);
+
+        return `
+          <li class="us-capa-prat">
+            <a class="us-capa-prat__link" href="${href}">
+              ${montarCapaLivro(titulo, indice)}
+              ${mostrarProgresso ? `
+                <div class="us-progresso" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progresso}" aria-label="Progresso de leitura">
+                  <span class="us-progresso__barra" style="width:${progresso}%"></span>
+                </div>
+                <p class="us-capa-prat__texto">${progresso}% Lido</p>
+              ` : `
+                <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas">
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                  <span class="us-avaliacao__qtd">(5)</span>
+                </div>
+              `}
+            </a>
+          </li>
+        `;
+      }).join('');
+    }
+
+    async function carregarSugestoesDisponiveis() {
+      const lista = document.querySelector('.us-sugestoes .us-lista-cards');
+      if (!lista) return;
+
+      try {
+        const resposta = await fetch('/api/livros');
+        if (!resposta.ok) throw new Error('Erro ao carregar livros');
+
+        const json = await resposta.json();
+        if (json.erro) {
+          if (json.erro === 'Faça login primeiro.') {
+            window.location.href = '01-login.html';
+            return;
+          }
+          throw new Error(json.erro);
+        }
+
+        const usuario = sessionStorage.getItem('usuarioLogado') || json.usuario || 'Usuário';
+        const livros = (Array.isArray(json.livros) ? json.livros : [])
+          .filter((livro) => Number(livro.disponivel) === 1 || livro.disponivel === true)
+          .slice(0, 5);
+
+        renderizarLivrosEmGrade(lista, livros, usuario, 'us-card-livro--vidro');
+      } catch (erro) {
+        lista.innerHTML = '<li class="us-vazio__texto">Não foi possível carregar as sugestões.</li>';
+      }
+    }
+
+    async function carregarContinuarLendo() {
+      const lista = document.querySelector('#us-prat-continuar');
+      if (!lista) return;
+
+      try {
+        const resposta = await fetch('/api/progresso');
+        if (!resposta.ok) throw new Error('Erro ao carregar progresso');
+
+        const progresso = await resposta.json();
+        const livros = Array.isArray(progresso) ? progresso.slice(0, 5) : [];
+        const usuario = sessionStorage.getItem('usuarioLogado') || 'Usuário';
+
+        renderizarLivrosEmPrateleira(lista, livros, usuario, { mostrarProgresso: true });
+      } catch (erro) {
+        lista.innerHTML = '<li class="us-vazio__texto">Nenhum livro em andamento.</li>';
+      }
+    }
+
+    function registrarAtualizacaoGlobal() {
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'librarvore:atualizacao') {
+          carregarContinuarLendo();
+        }
+      });
+
+      window.addEventListener('librarvore-refresh', () => {
+        carregarContinuarLendo();
+      });
+
+      window.addEventListener('pageshow', () => carregarContinuarLendo());
+      window.addEventListener('focus', () => carregarContinuarLendo());
+    }
+
+    async function carregarNovidadesAcervo() {
+      const lista = document.querySelector('#us-t-novidades')?.closest('.us-secao')?.querySelector('.us-lista-cards');
+      if (!lista) return;
+
+      try {
+        const resposta = await fetch('/api/livros');
+        if (!resposta.ok) throw new Error('Erro ao carregar novidades');
+
+        const json = await resposta.json();
+        const usuario = sessionStorage.getItem('usuarioLogado') || json.usuario || 'Usuário';
+        const livros = (Array.isArray(json.livros) ? json.livros : [])
+          .filter((livro) => Number(livro.disponivel) === 1 || livro.disponivel === true)
+          .slice(0, 5);
+
+        renderizarLivrosEmGrade(lista, livros, usuario, 'us-card-livro--verde');
+      } catch (erro) {
+        lista.innerHTML = '<li class="us-vazio__texto">Não foi possível carregar as novidades.</li>';
+      }
+    }
+
+    async function carregarMelhoresAvaliados() {
+      const lista = document.querySelector('#us-t-melhores')?.closest('.us-secao')?.querySelector('.us-prateleira');
+      if (!lista) return;
+
+      try {
+        const resposta = await fetch('/api/livros');
+        if (!resposta.ok) throw new Error('Erro ao carregar melhores avaliados');
+
+        const json = await resposta.json();
+        const usuario = sessionStorage.getItem('usuarioLogado') || json.usuario || 'Usuário';
+        const livros = (Array.isArray(json.livros) ? json.livros : [])
+          .filter((livro) => Number(livro.disponivel) === 1 || livro.disponivel === true)
+          .sort((a, b) => Number(b.destaque || 0) - Number(a.destaque || 0) || String(a.titulo).localeCompare(String(b.titulo)))
+          .slice(0, 5);
+
+        renderizarLivrosEmPrateleira(lista, livros, usuario, { mostrarProgresso: false });
+      } catch (erro) {
+        lista.innerHTML = '<li class="us-vazio__texto">Não foi possível carregar os melhores livros.</li>';
+      }
+    }
+
+    function renderizarCategorias(categorias) {
+      const lista = document.querySelector('.us-grade-categorias');
+      if (!lista) return;
+
+      const nomeCategorias = ['Direito', 'Educação', 'Saúde', 'Administração', 'Tecnologia', 'Literatura', 'Ciências', 'História'];
+      const mapa = categorias.reduce((acc, item) => {
+        acc[String(item.categoria || '').trim().toLowerCase()] = item.total || 0;
+        return acc;
+      }, {});
+
+      const itens = nomeCategorias.map((nome, indice) => {
+        const valor = String(nome).trim();
+        const slug = valor.toLowerCase();
+        const total = Number(mapa[slug] || 0);
+        return `
+          <li>
+            <a class="us-categoria us-categoria--${indice + 1}" href="03-acervo.html?categoria=${encodeURIComponent(valor)}">
+              <span>${valor}</span>
+            </a>
+          </li>
+        `;
+      }).join('');
+
+      lista.innerHTML = itens;
+    }
+
+    async function carregarCategoriasInicio() {
+      try {
+        const resposta = await fetch('/api/categorias');
+        if (!resposta.ok) throw new Error('Erro ao carregar categorias');
+        const json = await resposta.json();
+        const categorias = Array.isArray(json.categorias) ? json.categorias : [];
+
+        renderizarCategorias(categorias);
+      } catch (erro) {
+        console.warn('Não foi possível carregar categorias da home:', erro);
+      }
+    }
+
+    async function inicializarUsuarioInicio() {
+      registrarAtualizacaoGlobal();
+
+      const usuario = await obterUsuarioAtual();
+      sessionStorage.setItem('usuarioLogado', usuario);
+      atualizarUsuarioLogado(usuario);
+
+      await carregarSugestoesDisponiveis();
+      await carregarContinuarLendo();
+      await carregarNovidadesAcervo();
+      await carregarMelhoresAvaliados();
+      await carregarCategoriasInicio();
+    }
+
+    inicializarUsuarioInicio();
+  </script>
+  <script src="assets/js/backend.js"></script>
+</body>
+</html>

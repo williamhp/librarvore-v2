@@ -1,0 +1,414 @@
+/* ==========================================================
+   Librarvore — Catálogo com Design Imersivo
+   ========================================================== */
+:root {
+    --texto:        #1a1a1a;
+    --texto-sec:    #555;
+    --texto-ter:    #888;
+    --borda:        rgba(226, 222, 214, 0.8);
+    --borda-forte:  #d0ccc4;
+    --primario:     #1a4d8f;
+    --primario-h:   #143a6b;
+    --sucesso:      #1a7f37;
+    --perigo:       #c1272d;
+    --chip-bg:      rgba(238, 235, 228, 0.8);
+    --chip-hover:   #e0dcd3;
+    --serif:        Georgia, 'Times New Roman', serif;
+    --sans:         -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    color: var(--texto);
+    font-family: var(--sans);
+    line-height: 1.5;
+    min-height: 100vh;
+    font-size: 14px;
+    background-color: transparent; /* FUNDO REMOVIDO */
+}
+
+/* FUNDO DA BIBLIOTECA NO CATÁLOGO E LEITOR */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-image: url('assets/img/fundo-biblioteca.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    filter: brightness(0.7); /* Escurece para manter o contraste */
+}
+
+/* ==========================================================
+   HEADER DO CATÁLOGO (Claro para receber a logo colorida)
+   ========================================================== */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--borda);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primario);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.logo img {
+    height: 50px; /* Ajuste do tamanho da logo colorida */
+    width: auto;
+}
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.user-info {
+    color: var(--primario);
+    font-size: 14px;
+    font-weight: 600;
+}
+.btn-sair {
+    background: transparent;
+    border: 1px solid var(--borda-forte);
+    color: var(--texto-sec);
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: var(--sans);
+    transition: all .15s;
+}
+.btn-sair:hover {
+    background: var(--chip-bg);
+    color: var(--texto);
+}
+
+/* ==========================================================
+   MAIN (CONTAINER DO CATÁLOGO)
+   ========================================================== */
+.main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* ==========================================================
+   HERO LIVROS
+   ========================================================== */
+.hero-livros {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.hero-livros h1 {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--primario);
+}
+.hero-stats {
+    color: var(--texto-sec);
+    font-size: 14px;
+}
+
+/* ==========================================================
+   BUSCA E FILTROS
+   ========================================================== */
+.busca-wrap {
+    max-width: 600px;
+    margin: 0 auto 32px;
+}
+.busca-wrap input {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--borda-forte);
+    background: #fff;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.busca-wrap input:focus {
+    border-color: var(--primario);
+    box-shadow: 0 0 0 3px rgba(26, 77, 143, 0.1);
+}
+
+.secoes-titulo {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: var(--texto);
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+.chip {
+    background: var(--chip-bg);
+    border: 1px solid transparent;
+    color: var(--texto-sec);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--sans);
+    transition: all .15s;
+}
+.chip:hover {
+    background: var(--chip-hover);
+    color: var(--texto);
+}
+.chip.ativo {
+    background: var(--primario);
+    color: #fff;
+    border-color: var(--primario);
+    box-shadow: 0 2px 6px rgba(26, 77, 143, 0.3);
+}
+.chip .chip-count {
+    opacity: .8;
+    font-size: 11px;
+    margin-left: 4px;
+}
+
+.info-resultado {
+    color: var(--texto-sec);
+    font-size: 13px;
+    margin-bottom: 12px;
+    min-height: 18px;
+}
+
+/* ==========================================================
+   TABELA
+   ========================================================== */
+.tabela-wrap {
+    background: #fff;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+th {
+    background: #f4f2ec;
+    color: var(--texto-sec);
+    text-align: left;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--borda);
+}
+td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f0ede6;
+    vertical-align: middle;
+}
+tbody tr { transition: background .15s; }
+tbody tr:hover td { background: #faf9f6; }
+
+td.titulo-cell {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--texto);
+}
+td.autor-cell { color: var(--texto-sec); font-weight: 500; }
+
+.sim { color: var(--sucesso); font-weight: 700; }
+.nao { color: var(--perigo); font-weight: 700; }
+
+/* ==========================================================
+   PAGINAÇÃO
+   ========================================================== */
+.paginacao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+.pag-btn {
+    background: #fff;
+    border: 1px solid var(--borda-forte);
+    color: var(--texto);
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--sans);
+    transition: all .15s;
+}
+.pag-btn:hover:not(:disabled) {
+    background: var(--chip-bg);
+    border-color: var(--primario);
+}
+.pag-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+.pag-btn.ativo {
+    background: var(--primario);
+    color: #fff;
+    border-color: var(--primario);
+}
+.pag-info {
+    color: var(--texto-sec);
+    font-size: 13px;
+    margin: 0 8px;
+}
+
+/* ==========================================================
+   BOTÃO "LER"
+   ========================================================== */
+.acoes-cell { text-align: right; }
+
+.btn-ler {
+    background: var(--primario);
+    color: #fff;
+    border: 1px solid var(--primario);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--sans);
+    transition: all .15s;
+    box-shadow: 0 2px 4px rgba(26, 77, 143, 0.2);
+}
+.btn-ler:hover:not(:disabled) {
+    background: var(--primario-h);
+    border-color: var(--primario-h);
+    transform: translateY(-1px);
+}
+.btn-ler:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+    background: var(--texto-ter);
+    border-color: var(--texto-ter);
+    box-shadow: none;
+}
+
+/* ==========================================================
+   PÁGINA DE LEITURA (leitor.html)
+   ========================================================== */
+.pagina-leitor {
+    background: transparent;
+}
+
+.leitor-main {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+.leitor-cabecalho {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-bottom: 4px solid #d9a544;
+}
+.leitor-cabecalho h1 {
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--primario);
+    margin-bottom: 8px;
+}
+.leitor-subtitulo {
+    color: var(--texto-sec);
+    font-size: 15px;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+.leitor-acoes {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.leitor-acoes a,
+.leitor-acoes button {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+.leitor-acoes .btn-secundario {
+    background: var(--chip-bg);
+    color: var(--texto);
+}
+.leitor-acoes .btn-secundario:hover { background: var(--chip-hover); }
+
+.leitor-acoes .btn-primario {
+    background: var(--primario);
+    color: white;
+}
+.leitor-acoes .btn-primario:hover { background: var(--primario-h); }
+
+.leitor-conteudo {
+    background: #fff;
+    border-radius: 12px;
+    padding: 60px 70px;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.9;
+    color: #222;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 720px) {
+    .main { padding: 20px; margin: 20px auto; }
+    .leitor-main { padding: 0 16px; }
+    .leitor-cabecalho { padding: 24px 16px; }
+    .leitor-cabecalho h1 { font-size: 24px; }
+    .leitor-conteudo { padding: 30px 24px; font-size: 16px; line-height: 1.7; }
+    th, td { padding: 10px; font-size: 12px; }
+    .btn-ler { padding: 6px 10px; font-size: 12px; }
+}

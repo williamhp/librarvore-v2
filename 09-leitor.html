@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leitor — Librarvore</title>
+    <link rel="stylesheet" href="estilo.css">
+    <!-- Adicionando o CSS de login para reutilizar o header escuro se necessário, ou ele usará o header padrão do estilo.css -->
+    <link rel="stylesheet" href="login.css">
+</head>
+<body class="pagina-leitor">
+
+<!-- HEADER DO LEITOR (Usa a logo branca em fundo escuro) -->
+<header class="lg-header">
+    <a href="02-inicio.html" class="lg-logo">
+        <img src="assets/img/logo-librarvor113e.png" alt="Librarvore" onerror="this.outerHTML='📚 Librarvore'">
+    </a>
+    <div style="margin-left: auto;">
+        <button class="btn-sair" onclick="window.close()">✕ Fechar aba</button>
+    </div>
+</header>
+
+<main class="leitor-main">
+        
+    <div class="leitor-cabecalho">
+        <img src="assets/img/logo-librarvore-colorida.png" alt="Librárvore" width="500" >
+        <h1 id="tituloLivro">—</h1>
+        <p id="infoLivro" class="leitor-subtitulo">—</p>
+
+        <div class="leitor-acoes">
+            <a href="02-inicio.html" class="btn-secundario">← Voltar ao catálogo</a>
+            <button class="btn-primario" onclick="baixarTxt()">⬇️ Baixar .txt</button>
+        </div>
+    </div>
+
+    <article class="leitor-conteudo" id="conteudo">Carregando...</article>
+
+</main>
+
+<script src="leitor.js"></script>
+<script src="assets/js/backend.js"></script>
+</body>
+</html>

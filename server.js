@@ -10,6 +10,8 @@ const { promisify } = require('util');
 
 const app = express();
 const PORTA = Number(process.env.PORT) || 3000;
+const crypto = require('node:crypto');
+const { promisify } = require('util');
 const scrypt = promisify(crypto.scrypt);
 
 // ---------- Funções de Senha ----------

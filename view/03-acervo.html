@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acervo | Librárvore</title>
+
+  <!-- Fonte do design: Hind 400 / 500 / 600 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- CSS compartilhado (todas as classes têm prefixo "us-") -->
+  <link rel="stylesheet" href="../assets/css/librarvore.css">
+  <link rel="stylesheet" href="../assets/css/telas.css">
+  <link rel="stylesheet" href="../tema.css">
+  <script src="assets/preferencias.js"></script>
+</head>
+
+<body class="us-page">
+
+  <!-- ===== PARTIAL: sprite-icones (colar logo após <body>) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-estrela" viewBox="0 0 16 16"><polygon points="8 1 10.1 5.6 15 6.2 11.4 9.5 12.3 14.5 8 12 3.7 14.5 4.6 9.5 1 6.2 5.9 5.6" fill="currentColor"/></symbol>
+      <symbol id="i-casa" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></symbol>
+      <symbol id="i-livro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></g></symbol>
+      <symbol id="i-coracao" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></g></symbol>
+      <symbol id="i-marcador" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></g></symbol>
+      <symbol id="i-lampada" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></g></symbol>
+      <symbol id="i-busca" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g></symbol>
+      <symbol id="i-baixo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></g></symbol>
+      <symbol id="i-direita" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></g></symbol>
+      <symbol id="i-esquerda" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></g></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></g></symbol>
+      <symbol id="i-lixeira" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><path d="M10 11v6M14 11v6"/></g></symbol>
+      <symbol id="i-usuario" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></g></symbol>
+      <symbol id="i-configuracoes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></g></symbol>
+      <symbol id="i-sair" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></g></symbol>
+    </defs>
+  </svg>
+  <!-- ===== FIM PARTIAL: sprite-icones ===== -->
+
+  <!-- Controle do menu lateral em telas pequenas (só CSS) -->
+  <input type="checkbox" id="us-menu-toggle" class="us-menu-toggle" aria-label="Abrir ou fechar o menu lateral">
+  <a class="us-pular" href="#us-conteudo">Ir para o conteúdo</a>
+
+  <div class="us-layout">
+
+    <!-- ===== PARTIAL: menu-lateral ===== -->
+    <aside class="us-sidebar" id="us-menu">
+      <a class="us-sidebar__logo" href="02-inicio.html" aria-label="Librárvore - página inicial">
+        <img class="us-logo--claro" src="../assets/img/logo-librarvore-colorida.png" alt="Librárvore - Livraria + Biblioteca" height="109">
+        <img class="us-logo--escuro" src="../assets/img/logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="170" height="58">
+      </a>
+      <nav class="us-menu" aria-label="Menu lateral">
+        <div class="us-menu__grupo">
+          <p class="us-menu__titulo">Descubra seu Livro <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-baixo"/></svg></p>
+          <ul class="us-menu__lista">
+            <li><a class="us-menu__item" href="02-inicio.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-casa"/></svg>Início</a></li>
+            <li><a class="us-menu__item us-menu__item--ativo" aria-current="page" href="03-acervo.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-livro"/></svg>Acervo</a></li>
+          </ul>
+        </div>
+        <hr class="us-menu__divisor">
+        <div class="us-menu__grupo">
+          <p class="us-menu__titulo">Seu Acervo <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-baixo"/></svg></p>
+          <ul class="us-menu__lista">
+            <li><a class="us-menu__item" href="04-minha-lista.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg>Minha Lista</a></li>
+            <li><a class="us-menu__item" href="05-continuar-lendo.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-marcador"/></svg>Continuar lendo</a></li>
+            <li><a class="us-menu__item" href="02-inicio.html#us-t-sugestoes"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-lampada"/></svg>Sugestão de Leitura</a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+    <label for="us-menu-toggle" class="us-fundo-menu" aria-hidden="true"></label>
+    <!-- ===== FIM PARTIAL: menu-lateral ===== -->
+
+    <div class="us-conteudo">
+      <main id="us-conteudo">
+
+        <div class="us-destaque">
+        <!-- ===== PARTIAL: cabecalho (breadcrumb + busca + menu do perfil) ===== -->
+        <header class="us-cabecalho">
+          <p class="us-cabecalho__breadcrumb">Início  ›  Acervo</p>
+          <div class="us-cabecalho__linha">
+            <label for="us-menu-toggle" class="us-hamburger">
+              <span class="us-sr-only">Abrir menu lateral</span>
+              <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg>
+            </label>
+
+            <!-- BACK-END: busca por título/autor. Envia GET para o Acervo (?q=...) -->
+            <form class="us-busca" role="search" action="03-acervo.html" method="get">
+              <label class="us-sr-only" for="us-busca-campo">Buscar livro</label>
+              <button class="us-busca__botao" type="submit" aria-label="Buscar livro">
+                <svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-busca"/></svg>
+              </button>
+              <input class="us-busca__campo" id="us-busca-campo" type="search" name="q" placeholder="Buscar por título ou autor" autocomplete="off">
+            </form>
+
+            <!-- Menu do perfil: abre/fecha ao clicar na foto (assets/js/menu-perfil.js) -->
+            <div class="us-perfil-menu" data-perfil-menu>
+              <button class="us-perfil" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="us-perfil-painel" data-perfil-botao>
+                <!-- BACK-END: foto do usuário. Troque o span por <img class="us-perfil__avatar" src="..." alt=""> -->
+                <span class="us-perfil__avatar" aria-hidden="true">V</span>
+                <span class="us-perfil__nome">Victor</span><!-- BACK-END: nome do usuário logado -->
+                <svg class="us-icone us-icone--seta" aria-hidden="true" focusable="false"><use href="#i-baixo"/></svg>
+              </button>
+              <div class="us-perfil-painel" id="us-perfil-painel">
+                <ul role="menu">
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="07-meu-perfil.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-usuario"/></svg>Meu perfil</a></li>
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="08-configuracoes.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-configuracoes"/></svg>Configurações</a></li>
+                </ul>
+                <hr class="us-perfil-painel__divisor">
+                <ul role="menu">
+                  <!-- BACK-END: trocar por rota/ação de logout (encerrar sessão) -->
+                  <li role="none"><a class="us-perfil-item" role="menuitem" href="01-login.html" data-acao="sair"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-sair"/></svg>Sair da conta</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!-- ===== FIM PARTIAL: cabecalho ===== -->
+          <div class="us-pagina-titulo">
+            <h1>Acervo</h1>
+            <p>Explore todos os livros disponíveis na Librárvore.</p>
+          </div>
+        </div>
+
+        <div class="us-corpo">
+        <!-- BACK-END: categorias vindas do banco; marcar a ativa com us-chip--ativo + aria-current -->
+        <ul class="us-chips" id="us-categorias-acervo" aria-label="Filtrar por categoria"></ul>
+
+          <!-- ESTADO COM RESULTADOS -->
+          <div data-estado="lista">
+            <p class="us-contagem">15 livros (exemplo)</p><!-- BACK-END: total de resultados -->
+            <ul class="us-grade-livros" style="margin-top:12px">
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+          <li>
+            <!-- BACK-END: repetir por livro. Preencher data-livro-id, capa, título, autor, nota -->
+            <article class="us-card-lista" data-livro-id="">
+              <div class="us-card-lista__capa-area">
+                <a class="us-capa" href="06-detalhes-livro.html" aria-label="Ver detalhes do livro" role="img"></a>
+              <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas"><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg><span class="us-avaliacao__qtd">(5)</span></div>
+              <h3 class="us-card-lista__titulo"><a href="06-detalhes-livro.html">Nome do Livro</a></h3>
+              <p class="us-card-lista__autor">Escritor do livro</p>
+              <a class="us-card-lista__detalhes" href="06-detalhes-livro.html">Ver detalhes</a>
+            </article>
+          </li>
+            </ul>
+            <div class="us-centralizar" style="margin-top:28px">
+              <!-- BACK-END: paginação / carregar mais (ex.: ?pagina=2) -->
+              <button class="us-botao us-botao--carregar" type="button" data-acao="carregar-mais">Carregar mais livros</button>
+            </div>
+          </div>
+
+        <!-- ESTADO VAZIO: exibir quando não houver registros (remover o atributo hidden). Ocultar a lista nesse caso. -->
+        <section class="us-vazio" data-estado="sem-resultados" hidden>
+          <div class="us-vazio__icone"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-busca"/></svg></div>
+          <h2 class="us-vazio__titulo">Nenhum livro encontrado</h2>
+          <p class="us-vazio__texto">Não encontramos resultados para a sua busca. Verifique a digitação ou tente buscar por outro título ou autor.</p>
+          <div class="us-vazio__acoes">
+            <a class="us-botao" href="03-acervo.html">Limpar busca</a>
+            <a class="us-botao us-botao--secundario" href="03-acervo.html">Ver todo o Acervo</a>
+          </div>
+        </section>
+        </div>
+
+      </main>
+
+      <!-- ===== PARTIAL: rodape ===== -->
+      <footer class="us-rodape">
+        <div class="us-rodape__linha">
+          <a href="04-inicio.html" aria-label="Librárvore - página inicial"><img class="us-rodape__logo" src="assets/img/logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" height="75"></a>
+          <nav aria-label="Rodapé">
+            <ul class="us-rodape__links">
+              <li><a href="04-inicio.html">Início</a></li>
+              <li><a href="05-acervo.html">Acervo</a></li>
+              <li><a href="#">Sobre</a></li><!-- TODO: rota -->
+              <li><a href="#">Contato</a></li><!-- TODO: rota -->
+            </ul>
+          </nav>
+        </div>
+        <hr class="us-rodape__divisor">
+        <p class="us-rodape__copy">© 2026 Librárvore. Todos os direitos reservados.</p>
+      </footer>
+      <!-- ===== FIM PARTIAL: rodape ===== -->
+    </div>
+  </div>
+
+  <script src="../assets/js/menu-perfil.js"></script>
+  <script>
+    const paletasCapa = [
+      ['#4F46E5', '#7C3AED'],
+      ['#0F766E', '#34D399'],
+      ['#F59E0B', '#F97316'],
+      ['#EC4899', '#8B5CF6'],
+      ['#14B8A6', '#2563EB'],
+      ['#DC2626', '#F59E0B']
+    ];
+
+    function montarCapaLivro(titulo, indice = 0) {
+      const texto = String(titulo || 'L').trim();
+      const iniciais = texto.split(/\s+/).slice(0, 2).map((parte) => parte.charAt(0).toUpperCase()).join('').slice(0, 2) || 'L';
+      const [inicio, fim] = paletasCapa[indice % paletasCapa.length];
+
+      return `
+        <div class="us-capa" role="img" aria-label="Capa do livro ${String(titulo || 'Livro').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}" style="background:linear-gradient(135deg, ${inicio}, ${fim}); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; letter-spacing:0.08em; font-size:1.4rem; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);">
+          <span>${iniciais}</span>
+        </div>
+      `;
+    }
+
+    function escaparAspas(valor) {
+      return String(valor ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\"/g, '\\"');
+    }
+
+    function atualizarUsuarioLogado(usuario) {
+      const nome = String(usuario || 'Usuário').trim();
+      document.querySelectorAll('.us-perfil__nome').forEach(el => {
+        el.textContent = nome;
+      });
+      document.querySelectorAll('.us-perfil__avatar').forEach(el => {
+        el.textContent = nome ? nome.charAt(0).toUpperCase() : 'U';
+      });
+    }
+
+    function configurarBuscaAcervo() {
+      const formBusca = document.querySelector('.us-busca');
+      const campoBusca = document.getElementById('us-busca-campo');
+      if (!formBusca || !campoBusca) return;
+
+      const buscaAtual = new URLSearchParams(window.location.search).get('q') || '';
+      campoBusca.value = buscaAtual;
+
+      formBusca.addEventListener('submit', (evento) => {
+        const valor = campoBusca.value.trim();
+        if (!valor) {
+          evento.preventDefault();
+          window.location.href = '03-acervo.html';
+        }
+      });
+    }
+
+    function renderizarCategoriasAcervo(categorias) {
+      const lista = document.getElementById('us-categorias-acervo');
+      if (!lista) return;
+
+      const categoriaAtiva = (new URLSearchParams(window.location.search).get('categoria') || '').trim();
+      const categoriasPadrao = ['Direito', 'Educação', 'Saúde', 'Administração', 'Tecnologia', 'Literatura', 'Ciências', 'História'];
+      const mapa = (categorias || []).reduce((acc, item) => {
+        const nome = String(item.categoria || '').trim();
+        if (nome) acc[nome.toLowerCase()] = nome;
+        return acc;
+      }, {});
+
+      const nomes = categoriasPadrao.filter((nome) => mapa[nome.toLowerCase()] || Object.prototype.hasOwnProperty.call(mapa, nome.toLowerCase()));
+      const extras = Object.values(mapa).filter((nome) => !categoriasPadrao.some((padrao) => padrao.toLowerCase() === nome.toLowerCase()));
+      const listaFinal = [...nomes, ...extras];
+
+      const itens = [
+        `<li><a class="us-chip ${!categoriaAtiva ? 'us-chip--ativo' : ''}" href="03-acervo.html" ${!categoriaAtiva ? 'aria-current="true"' : 'aria-current="false"'}>Todos</a></li>`
+      ];
+
+      listaFinal.forEach((categoria) => {
+        const ativo = categoriaAtiva.toLowerCase() === categoria.toLowerCase();
+        itens.push(`<li><a class="us-chip ${ativo ? 'us-chip--ativo' : ''}" href="03-acervo.html?categoria=${encodeURIComponent(categoria)}" aria-current="${ativo ? 'true' : 'false'}">${categoria}</a></li>`);
+      });
+
+      lista.innerHTML = itens.join('');
+      aplicarCategoriaAtiva();
+    }
+
+    async function carregarCategoriasAcervo() {
+      try {
+        const resposta = await fetch('/api/categorias');
+        if (!resposta.ok) throw new Error('Erro ao carregar categorias');
+        const json = await resposta.json();
+        const categorias = Array.isArray(json.categorias) ? json.categorias : [];
+        renderizarCategoriasAcervo(categorias);
+      } catch (erro) {
+        console.warn('Não foi possível carregar categorias do acervo:', erro);
+        renderizarCategoriasAcervo([]);
+      }
+    }
+
+    function aplicarCategoriaAtiva() {
+      const categoriaAtiva = (new URLSearchParams(window.location.search).get('categoria') || '').trim();
+      document.querySelectorAll('.us-chip').forEach(link => {
+        const params = new URLSearchParams((link.getAttribute('href') || '').split('?')[1] || '');
+        const categoriaLink = (params.get('categoria') || '').trim();
+        const ativo = categoriaLink.toLowerCase() === categoriaAtiva.toLowerCase();
+        const todos = !categoriaAtiva && !categoriaLink;
+        link.classList.toggle('us-chip--ativo', ativo || todos);
+        link.setAttribute('aria-current', ativo || todos ? 'true' : 'false');
+      });
+    }
+
+    function abrirLeitor(isbn, titulo, autor, usuario = 'Usuário') {
+      const params = new URLSearchParams({
+        isbn: isbn || '',
+        titulo: titulo || 'Livro',
+        autor: autor || 'Autor Desconhecido',
+        usuario: usuario || 'Usuário'
+      });
+      window.location.href = '09-leitor.html?' + params.toString();
+    }
+
+    const LIBRARVORE_REFRESH_KEY = 'librarvore:atualizacao';
+
+    function notificarAtualizacao(tipo = 'lista') {
+      const payload = { tipo, timestamp: Date.now() };
+      try {
+        localStorage.setItem(LIBRARVORE_REFRESH_KEY, JSON.stringify(payload));
+      } catch (erro) {
+        console.warn('Não foi possível notificar atualização da lista:', erro);
+      }
+
+      try {
+        window.dispatchEvent(new CustomEvent('librarvore-refresh', { detail: payload }));
+      } catch (erro) {
+        console.warn('Não foi possível disparar o evento de atualização:', erro);
+      }
+    }
+
+    async function alternarFavorito(isbn, botao) {
+      if (!isbn || !botao) return;
+
+      const ativo = botao.getAttribute('aria-pressed') === 'true';
+      const metodo = ativo ? 'DELETE' : 'POST';
+      const endpoint = ativo ? `/api/favoritos/${encodeURIComponent(isbn)}` : '/api/favoritos';
+
+      try {
+        const resposta = await fetch(endpoint, {
+          method: metodo,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          ...(ativo ? {} : { body: JSON.stringify({ isbn }) })
+        });
+
+        const dados = await resposta.json();
+        if (!resposta.ok) {
+          alert(dados.erro || 'Não foi possível atualizar a lista.');
+          return;
+        }
+
+        const novoEstado = !ativo;
+        botao.setAttribute('aria-pressed', String(novoEstado));
+        botao.classList.toggle('is-ativo', novoEstado);
+        botao.title = novoEstado ? 'Remover da Minha Lista' : 'Adicionar à Minha Lista';
+        notificarAtualizacao('favoritos');
+        alert(dados.mensagem || 'Lista atualizada!');
+      } catch (erro) {
+        alert('Não foi possível atualizar sua lista.');
+      }
+    }
+
+    const ACERVO_ITENS_POR_VEZ = 12;
+    let acervoLivros = [];
+    let acervoVisiveis = ACERVO_ITENS_POR_VEZ;
+
+    function renderizarAcervoLivros(livros, usuarioAtual = 'Usuário') {
+      const lista = document.querySelector('.us-grade-livros');
+      const contagem = document.querySelector('.us-contagem');
+      if (!lista || !contagem) return;
+
+      contagem.textContent = `${livros.length} livro${livros.length === 1 ? '' : 's'} disponível${livros.length === 1 ? '' : 'is'}`;
+
+      if (livros.length === 0) {
+        lista.innerHTML = '<li class="us-vazio__texto">Nenhum livro encontrado nesta categoria.</li>';
+        atualizarBotaoCarregarMais(0);
+        return;
+      }
+
+      const livrosVisiveis = livros.slice(0, acervoVisiveis);
+      lista.innerHTML = livrosVisiveis.map((livro, indice) => {
+        const isbn = escaparAspas(livro.isbn || '');
+        const titulo = escaparAspas(livro.titulo || 'Livro sem título');
+        const autor = escaparAspas(livro.autor || 'Autor não informado');
+        const usuario = escaparAspas(usuarioAtual);
+
+        return `
+          <li>
+            <article class="us-card-lista" data-livro-id="${isbn}">
+              <div class="us-card-lista__capa-area">
+                <button class="us-capa" type="button" aria-label="Abrir ${titulo}" onclick="abrirLeitor('${isbn}', '${titulo}', '${autor}', '${usuario}')" style="cursor:pointer;border:none;padding:0;display:flex;align-items:center;justify-content:center;">
+                  ${montarCapaLivro(livro.titulo || 'Livro', indice)}
+                </button>
+                <button class="us-card-lista__salvar" type="button" data-acao="salvar-lista" data-isbn="${isbn}" aria-pressed="false" aria-label="Adicionar à Minha Lista"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-coracao"/></svg></button>
+              </div>
+              <div class="us-avaliacao" role="img" aria-label="Avaliação: 5 estrelas">
+                <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                <svg class="us-estrela" aria-hidden="true" focusable="false"><use href="#i-estrela"/></svg>
+                <span class="us-avaliacao__qtd">(5)</span>
+              </div>
+              <h3 class="us-card-lista__titulo"><button type="button" onclick="abrirLeitor('${isbn}', '${titulo}', '${autor}', '${usuario}')" style="all:unset;cursor:pointer;color:inherit;font:inherit;">${titulo}</button></h3>
+              <p class="us-card-lista__autor">${autor}</p>
+              <button class="us-card-lista__detalhes" type="button" onclick="abrirLeitor('${isbn}', '${titulo}', '${autor}', '${usuario}')">Ler agora</button>
+            </article>
+          </li>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.us-card-lista__salvar').forEach((botao) => {
+        botao.addEventListener('click', () => alternarFavorito(botao.dataset.isbn, botao));
+      });
+
+      atualizarBotaoCarregarMais(livros.length);
+    }
+
+    function atualizarBotaoCarregarMais(totalLivros) {
+      const botao = document.querySelector('[data-acao="carregar-mais"]');
+      if (!botao) return;
+
+      const mostrar = totalLivros > acervoVisiveis;
+      botao.hidden = !mostrar;
+      botao.disabled = !mostrar;
+      botao.textContent = mostrar ? `Carregar mais livros (${Math.min(ACERVO_ITENS_POR_VEZ, Math.max(0, totalLivros - acervoVisiveis))})` : 'Todos os livros exibidos';
+    }
+
+    function bindCarregarMais() {
+      const botao = document.querySelector('[data-acao="carregar-mais"]');
+      if (!botao) return;
+
+      botao.onclick = () => {
+        if (acervoVisiveis >= acervoLivros.length) return;
+        acervoVisiveis = Math.min(acervoVisiveis + ACERVO_ITENS_POR_VEZ, acervoLivros.length);
+        renderizarAcervoLivros(acervoLivros, sessionStorage.getItem('usuarioLogado') || 'Usuário');
+      };
+    }
+
+    async function carregarAcervo() {
+      const lista = document.querySelector('.us-grade-livros');
+      if (!lista) return;
+
+      const busca = new URLSearchParams(window.location.search).get('q') || '';
+      const categoria = new URLSearchParams(window.location.search).get('categoria') || '';
+
+      try {
+        const params = new URLSearchParams();
+        if (categoria) params.set('categoria', categoria);
+        if (busca) params.set('q', busca);
+
+        const url = params.toString() ? `/api/livros?${params.toString()}` : '/api/livros';
+        const resposta = await fetch(url);
+        const json = await resposta.json();
+
+        if (json.erro) {
+          window.location.href = '01-login.html';
+          return;
+        }
+
+        atualizarUsuarioLogado(json.usuario || 'Usuário');
+
+        const livros = Array.isArray(json.livros) ? json.livros : [];
+        acervoLivros = livros;
+        acervoVisiveis = Math.min(ACERVO_ITENS_POR_VEZ, livros.length || 0);
+
+        if (livros.length === 0) {
+          renderizarAcervoLivros([], json.usuario || 'Usuário');
+          return;
+        }
+
+        renderizarAcervoLivros(livros, json.usuario || 'Usuário');
+      } catch (erro) {
+        lista.innerHTML = '<li class="us-vazio__texto">Erro ao carregar os livros. Tente novamente.</li>';
+        atualizarBotaoCarregarMais(0);
+      }
+
+      bindCarregarMais();
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      configurarBuscaAcervo();
+      await carregarCategoriasAcervo();
+      aplicarCategoriaAtiva();
+      carregarAcervo();
+    });
+  </script>
+  <script src="assets/js/backend.js"></script>
+</body>
+</html>

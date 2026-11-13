@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nova senha | Librárvore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="tema.css">
+  <script src="assets/preferencias.js"></script>
+</head>
+<body class="lg-page">
+
+  <!-- ===== Barra superior ===== -->
+  <header class="lg-header lg-header--nav">
+    <a class="lg-logo" href="04-inicio.html" aria-label="Librárvore - página inicial">
+      <!-- Logo branca com fundo transparente (assets/img/logo-librarvore-branca.png) -->
+      <img src="assets/img/logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="230" height="75">
+    </a>
+
+    <!-- Menu hambúrguer (somente telas pequenas) - funciona só com CSS, sem JavaScript -->
+    <input type="checkbox" id="lg-menu-toggle" class="lg-menu-toggle">
+    <label for="lg-menu-toggle" class="lg-hamburger">
+      <span class="lg-sr-only">Abrir ou fechar o menu</span>
+      <span class="lg-hamburger__barras" aria-hidden="true"></span>
+    </label>
+
+    <nav class="lg-nav" aria-label="Menu principal">
+      <ul class="lg-nav__lista">
+        <!-- TODO: trocar os href="#" pelas rotas reais do projeto -->
+        <li><a class="lg-nav__link lg-nav__link--ativo" href="04-inicio.html">Inicio</a></li>
+        <li><a class="lg-nav__link" href="05-acervo.html">Acervo</a></li>
+        <li><a class="lg-nav__link" href="#">Sobre</a></li>
+        <li><a class="lg-nav__link" href="#">Contato</a></li>
+      </ul>
+      <a class="lg-nav__login" href="01-login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="lg-main" id="conteudo">
+    <section class="lg-card lg-card--auth" aria-labelledby="lg-titulo">
+      <div data-estado="nova-senha">
+        <h1 class="lg-card__titulo" id="lg-titulo">Crie uma nova senha</h1>
+        <p class="lg-texto">Escolha uma senha nova para acessar a sua conta.</p>
+        <form class="lg-form" id="form-nova-senha" action="#" method="post">
+          <input type="hidden" name="token" value="">
+          <div class="lg-campo">
+            <label class="lg-sr-only" for="lg-nova">Nova senha</label>
+            <input class="lg-campo__input" type="password" id="lg-nova" name="nova_senha" placeholder="Nova senha" autocomplete="new-password" minlength="8" required>
+            <svg class="lg-campo__icone lg-campo__icone--senha" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true" focusable="false"><path d="M5.5 13V9a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.75" y="13" width="16.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="19" r="1.6" fill="currentColor"/></svg>
+          </div>
+          <div class="lg-campo">
+            <label class="lg-sr-only" for="lg-confirma">Confirmar nova senha</label>
+            <input class="lg-campo__input" type="password" id="lg-confirma" name="confirmar_senha" placeholder="Confirmar nova senha" autocomplete="new-password" minlength="8" required>
+            <svg class="lg-campo__icone lg-campo__icone--senha" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true" focusable="false"><path d="M5.5 13V9a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.75" y="13" width="16.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="19" r="1.6" fill="currentColor"/></svg>
+          </div>
+          <p class="lg-texto" role="status" data-form-status></p>
+          <button class="lg-botao" type="submit">Redefinir senha</button>
+          <a class="lg-link-voltar" href="01-login.html">Voltar para o login</a>
+        </form>
+      </div>
+      <div data-estado="senha-redefinida" hidden>
+        <h1 class="lg-card__titulo">Senha alterada</h1>
+        <p class="lg-texto">Sua senha foi redefinida. Entre novamente com a nova senha.</p>
+        <a class="lg-botao" href="01-login.html">Voltar para o login</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/auth.js"></script>
+</body>
+</html>

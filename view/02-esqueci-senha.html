@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Esqueci minha senha | Librárvore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="tema.css">
+  <script src="assets/preferencias.js"></script>
+</head>
+<body class="lg-page">
+
+  <!-- ESTADOS (alternados por assets/js/auth.js): preenchimento -> confirmação; e-mail inválido aparece no próprio formulário -->
+  <!-- ===== Barra superior ===== -->
+  <header class="lg-header lg-header--nav">
+    <a class="lg-logo" href="04-inicio.html" aria-label="Librárvore - página inicial">
+      <!-- Logo branca com fundo transparente (assets/img/logo-librarvore-branca.png) -->
+      <img src="assets/img/logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="230" height="75">
+    </a>
+
+    <!-- Menu hambúrguer (somente telas pequenas) - funciona só com CSS, sem JavaScript -->
+    <input type="checkbox" id="lg-menu-toggle" class="lg-menu-toggle">
+    <label for="lg-menu-toggle" class="lg-hamburger">
+      <span class="lg-sr-only">Abrir ou fechar o menu</span>
+      <span class="lg-hamburger__barras" aria-hidden="true"></span>
+    </label>
+
+    <nav class="lg-nav" aria-label="Menu principal">
+      <ul class="lg-nav__lista">
+        <!-- TODO: trocar os href="#" pelas rotas reais do projeto -->
+        <li><a class="lg-nav__link lg-nav__link--ativo" href="04-inicio.html">Inicio</a></li>
+        <li><a class="lg-nav__link" href="05-acervo.html">Acervo</a></li>
+        <li><a class="lg-nav__link" href="#">Sobre</a></li>
+        <li><a class="lg-nav__link" href="#">Contato</a></li>
+      </ul>
+      <a class="lg-nav__login" href="01-login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="lg-main" id="conteudo">
+    <section class="lg-card lg-card--auth" aria-labelledby="lg-titulo">
+
+      <!-- Estado 1 (e Estado 3 quando o e-mail é inválido): preenchimento -->
+      <div data-estado="preenchimento">
+        <h1 class="lg-card__titulo" id="lg-titulo">Esqueceu sua senha?</h1>
+        <p class="lg-texto">Informe o e-mail cadastrado e enviaremos um link para você redefinir a sua senha.</p>
+        <form class="lg-form" id="form-esqueci" action="#" method="post" novalidate>
+          <div class="lg-campo" data-campo>
+            <label class="lg-sr-only" for="lg-email">E-mail cadastrado</label>
+            <input class="lg-campo__input" type="email" id="lg-email" name="email" placeholder="Email" autocomplete="email" required aria-describedby="lg-erro-email" aria-invalid="false">
+            <svg class="lg-campo__icone lg-campo__icone--email" viewBox="0 0 22 17" width="22" height="17" aria-hidden="true" focusable="false"><rect x="0.75" y="0.75" width="20.5" height="15.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 2l9.5 7.5L20.5 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="lg-erro" id="lg-erro-email" role="alert" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5v4M8 11h.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Informe um e-mail válido, por exemplo: nome@exemplo.com.</span></p>
+          <p class="lg-texto" role="status" data-form-status></p>
+          <button class="lg-botao" type="submit">Enviar link de recuperação</button>
+          <a class="lg-link-voltar" href="01-login.html">Voltar para o login</a>
+        </form>
+      </div>
+
+      <!-- Estado 2: confirmação (mostrar sempre que o formato for válido, sem revelar se o e-mail existe) -->
+      <div data-estado="confirmacao" hidden>
+        <div class="lg-confirmacao-icone"><svg viewBox="0 0 36 36" width="36" height="36" aria-hidden="true" focusable="false"><rect x="3" y="7" width="30" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 9l14 10L32 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h1 class="lg-card__titulo">Verifique seu e-mail</h1>
+        <p class="lg-texto">Se o e-mail informado estiver cadastrado, enviaremos as instruções para redefinir a sua senha. Confira também a caixa de spam.</p>
+        <p class="lg-texto" role="status" data-form-status></p>
+        <a class="lg-botao" href="01-login.html">Voltar para o login</a>
+        <button class="lg-link-texto" type="button" data-acao="reenviar">Não recebeu? Reenviar link</button>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="assets/auth.js"></script>
+</body>
+</html>

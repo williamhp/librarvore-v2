@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Librárvore</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/login.css">
+  <link rel="stylesheet" href="tema.css">
+  <script src="assets/preferencias.js"></script>
+</head>
+
+<body class="lg-page">
+  <header class="lg-header">
+    <a class="lg-logo" href="04-inicio.html" aria-label="Librárvore - página inicial">
+      <img src="assets/img/login-logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="230" height="75">
+    </a>
+
+    <input type="checkbox" id="lg-menu-toggle" class="lg-menu-toggle">
+    <label for="lg-menu-toggle" class="lg-hamburger">
+      <span class="lg-sr-only">Abrir ou fechar o menu</span>
+      <span class="lg-hamburger__barras" aria-hidden="true"></span>
+    </label>
+
+    <nav class="lg-nav" aria-label="Menu principal">
+      <ul class="lg-nav__lista">
+        <li><a class="lg-nav__link lg-nav__link--ativo" href="04-inicio.html">Inicio</a></li>
+        <li><a class="lg-nav__link" href="05-acervo.html">Acervo</a></li>
+        <li><a class="lg-nav__link" href="#">Sobre</a></li>
+        <li><a class="lg-nav__link" href="#">Contato</a></li>
+      </ul>
+      <a class="lg-nav__login" href="01-login.html" aria-current="page">Login</a>
+    </nav>
+  </header>
+
+  <main class="lg-main" id="conteudo">
+    <section class="lg-card" aria-labelledby="lg-titulo">
+      <h1 class="lg-card__titulo" id="lg-titulo">Login</h1>
+
+      <form class="lg-form" id="formLogin">
+        <div id="msgLogin" class="lg-erro escondido" role="alert" aria-live="polite"></div>
+
+        <div class="lg-campo">
+          <label class="lg-sr-only" for="email">Email</label>
+          <input class="lg-campo__input" type="email" id="email" name="email"
+                 placeholder="Email" autocomplete="username" required>
+          <svg class="lg-campo__icone lg-campo__icone--email" viewBox="0 0 22 17" width="22" height="17" aria-hidden="true" focusable="false">
+            <rect x="0.75" y="0.75" width="20.5" height="15.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M1.5 2l9.5 7.5L20.5 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="lg-campo">
+          <label class="lg-sr-only" for="senha">Senha</label>
+          <input class="lg-campo__input" type="password" id="senha" name="senha"
+                 placeholder="Senha" autocomplete="current-password" required>
+          <svg class="lg-campo__icone lg-campo__icone--senha" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true" focusable="false">
+            <path d="M5.5 13V9a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="2.75" y="13" width="16.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="11" cy="19" r="1.6" fill="currentColor"/>
+          </svg>
+        </div>
+
+        <div class="lg-opcoes">
+          <label class="lg-lembrar">
+            <input class="lg-lembrar__input" type="checkbox" name="lembrar" value="1" checked>
+            <span class="lg-lembrar__texto">Lembrar de mim</span>
+          </label>
+          <a class="lg-link-esqueceu" href="02-esqueci-senha.html">Esqueceu a senha?</a>
+        </div>
+
+        <button class="lg-botao" type="submit">Entrar</button>
+
+        <p class="lg-cadastro">
+          Não tem uma&nbsp; conta?
+          <a class="lg-cadastro__link" href="#cadastro" onclick="cadastrar(); return false;">Cadastra-se</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <script src="assets/js/backend.js"></script>
+</body>
+</html>

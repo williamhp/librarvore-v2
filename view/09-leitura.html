@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leitura | Librárvore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Hind (interface) e Lora (texto do livro) -->
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="librarvore.css">
+  <link rel="stylesheet" href="telas.css">
+  <link rel="stylesheet" href="tema.css">
+  <script src="assets/preferencias.js"></script>
+</head>
+<body class="us-page us-leitura-page">
+
+  <!-- ===== PARTIAL: sprite-icones (colar logo após <body>) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-estrela" viewBox="0 0 16 16"><polygon points="8 1 10.1 5.6 15 6.2 11.4 9.5 12.3 14.5 8 12 3.7 14.5 4.6 9.5 1 6.2 5.9 5.6" fill="currentColor"/></symbol>
+      <symbol id="i-casa" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></symbol>
+      <symbol id="i-livro" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></g></symbol>
+      <symbol id="i-coracao" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></g></symbol>
+      <symbol id="i-marcador" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></g></symbol>
+      <symbol id="i-lampada" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></g></symbol>
+      <symbol id="i-busca" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g></symbol>
+      <symbol id="i-baixo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></g></symbol>
+      <symbol id="i-direita" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></g></symbol>
+      <symbol id="i-esquerda" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></g></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></g></symbol>
+      <symbol id="i-lixeira" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><path d="M10 11v6M14 11v6"/></g></symbol>
+      <symbol id="i-usuario" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></g></symbol>
+      <symbol id="i-configuracoes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></g></symbol>
+      <symbol id="i-sol" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></g></symbol>
+      <symbol id="i-lua" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></g></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></g></symbol>
+      <symbol id="i-sair" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></g></symbol>
+    </defs>
+  </svg>
+  <!-- ===== FIM PARTIAL: sprite-icones ===== -->
+
+  <!-- ===== Barra superior: voltar, logo, tamanho do texto, tema e download ===== -->
+  <header class="us-leitura-topo">
+    <div class="us-leitura-topo__esq">
+      <a class="us-leitura-voltar" href="08-detalhes-livro.html"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-esquerda"/></svg>Voltar aos detalhes</a>
+      <span class="us-leitura-topo__divisor" aria-hidden="true"></span>
+      <a class="us-leitura-logo" href="04-inicio.html" aria-label="Librárvore - página inicial">
+        <img class="us-logo--claro" src="assets/img/logo-librarvore-colorida.png" alt="Librárvore" height="37">
+        <img class="us-logo--escuro" src="assets/img/logo-librarvore-branca.png" alt="Librárvore" height="38">
+      </a>
+    </div>
+    <div class="us-leitura-topo__dir">
+      <div class="us-seg" role="group" aria-label="Tamanho do texto">
+        <button class="us-seg__opcao" type="button" data-pref-tamanho="pequeno" aria-pressed="false" aria-label="Texto pequeno"><span class="us-seg__a" style="font-size:13px">A</span></button>
+        <button class="us-seg__opcao" type="button" data-pref-tamanho="medio" aria-pressed="false" aria-label="Texto médio"><span class="us-seg__a" style="font-size:16px">A</span></button>
+        <button class="us-seg__opcao" type="button" data-pref-tamanho="grande" aria-pressed="false" aria-label="Texto grande"><span class="us-seg__a" style="font-size:20px">A</span></button>
+      </div>
+      <div class="us-seg" role="group" aria-label="Tema de leitura">
+        <button class="us-seg__opcao" type="button" data-pref-tema="claro" aria-pressed="false"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-sol"/></svg>Claro</button>
+        <button class="us-seg__opcao" type="button" data-pref-tema="escuro" aria-pressed="false"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-lua"/></svg>Escuro</button>
+      </div>
+      <!-- BACK-END: data-download-url = endereço do arquivo .txt do livro; data-download-nome = nome do arquivo -->
+      <button class="us-botao-download" type="button" data-acao="baixar-livro" data-download-url="" data-download-nome="nome-do-livro"><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-download"/></svg>Baixar livro (.txt)</button>
+    </div>
+  </header>
+
+  <!-- ===== Leitura ===== -->
+  <!-- BACK-END: preencher título, autor, ISBN, total de páginas/capítulos e as páginas do livro (conteúdo abaixo é EXEMPLO) -->
+  <main class="us-leitura-corpo" id="us-conteudo" data-leitura data-titulo="Nome do Livro" data-autor="Escritor do livro" data-isbn="978-00-0000-000-0" data-total-paginas="240" data-total-capitulos="12">
+    <div class="us-leitura-coluna">
+      <div class="us-leitura-info">
+        <h1>Nome do Livro</h1>
+        <p>Escritor do livro  ·  ISBN 978-00-0000-000-0 (exemplo)</p>
+        <span class="us-aviso-exemplo">Texto de exemplo — conteúdo provisório</span>
+        <p class="us-status" role="status" data-leitura-status></p>
+      </div>
+      <article class="us-folha" aria-live="polite">
+        <section class="us-pagina-livro" data-capitulo="1" data-numero="12" data-pct="5">
+          <p class="us-folha__etiqueta">CAPÍTULO 1</p>
+          <h2>Um começo de exemplo</h2>
+          <p>Este é um texto de exemplo, usado apenas para demonstrar a área de leitura do Librárvore. Quando o conteúdo real do livro estiver disponível, ele ocupará este espaço mantendo o mesmo ritmo de linhas, margens e parágrafos.</p>
+          <p>A leitura prolongada pede conforto. Por isso o texto usa uma fonte com serifa, entrelinhas generosas e uma largura de coluna moderada, em um fundo suave que cansa menos os olhos tanto no tema claro quanto no escuro.</p>
+          <p>Você pode alterar o tamanho das letras e o tema a qualquer momento nos controles do topo da página. As escolhas valem para todo o site e ficam salvas nas suas preferências de leitura.</p>
+          <p>Use os botões na parte inferior para avançar ou voltar entre as páginas. A barra de progresso mostra o quanto do livro já foi lido, sem tirar a atenção do texto.</p>
+        </section>
+        <section class="us-pagina-livro" data-capitulo="1" data-numero="13" data-pct="5" hidden>
+          <p class="us-folha__etiqueta">CAPÍTULO 1</p>
+          <p>Continuação do texto de exemplo. A mudança de página mantém a mesma estrutura: título do livro e controles ao alto, folha de leitura ao centro e navegação na parte inferior.</p>
+          <p>Os parágrafos têm espaçamento confortável entre si, e as margens laterais evitam linhas longas demais, o que facilita acompanhar o texto sem perder o ponto onde a leitura parou.</p>
+          <p>Neste protótipo, o conteúdo é apenas ilustrativo. Os dados reais do livro, como capítulos, número de páginas e progresso, serão fornecidos pelo sistema.</p>
+        </section>
+        <section class="us-pagina-livro" data-capitulo="2" data-numero="14" data-pct="6" hidden>
+          <p class="us-folha__etiqueta">CAPÍTULO 2</p>
+          <h2>Outro trecho de exemplo</h2>
+          <p>Aqui começa um novo capítulo de exemplo. O título do capítulo usa o mesmo estilo e muda de tamanho junto com a preferência de leitura escolhida pelo usuário.</p>
+          <p>Como este é o fim da amostra do protótipo, o botão para avançar aparece desabilitado, mostrando como a interface se comporta na última página disponível.</p>
+        </section>
+        <p class="us-folha__pagina" data-leitura-numero>Página 12 de 240 (exemplo)</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- ===== Barra inferior: navegação e progresso ===== -->
+  <footer class="us-leitura-rodape">
+    <button class="us-botao-nav us-botao-nav--anterior" type="button" data-leitura-anterior><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-esquerda"/></svg>Anterior</button>
+    <div class="us-leitura-progresso">
+      <div class="us-leitura-progresso__barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" aria-label="Progresso de leitura"><span class="us-leitura-progresso__preenchimento" data-leitura-barra style="width:5%"></span></div>
+      <p class="us-leitura-progresso__texto" data-leitura-texto>Capítulo 1 de 12  ·  Página 12 de 240  ·  5% lido (exemplo)</p>
+    </div>
+    <button class="us-botao-nav us-botao-nav--proximo" type="button" data-leitura-proximo>Próximo<svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-direita"/></svg></button>
+  </footer>
+
+  <!-- Aviso do download -->
+  <div class="us-aviso-download" role="status" data-aviso-download><svg class="us-icone" aria-hidden="true" focusable="false"><use href="#i-download"/></svg><span data-aviso-texto></span></div>
+
+  <script src="assets/leitura.js"></script>
+  <script src="assets/js/backend.js"></script>
+</body>
+</html>

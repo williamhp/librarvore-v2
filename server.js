@@ -23,7 +23,7 @@ app.use(session({
 
 // ---------- Rotas ----------
 registrarRotasPagina(app);
-registrarRotasApi(app, PORTA);
+const inicializarTabelas = registrarRotasApi(app, PORTA);
 
 // ---------- Arquivos Estáticos ----------
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
@@ -47,6 +47,15 @@ for (const [rota, arquivo] of Object.entries(arquivosCompartilhados)) {
 
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
-app.listen(PORTA, '0.0.0.0', () => {
-    console.log(`Librárvore disponível em http://localhost:${PORTA}`);
+async function iniciarServidor() {
+    await inicializarTabelas();
+
+    app.listen(PORTA, '0.0.0.0', () => {
+        console.log(`Librárvore disponível em http://localhost:${PORTA}`);
+    });
+}
+
+iniciarServidor().catch((erro) => {
+    console.error('Falha ao inicializar o servidor e o banco de dados:', erro);
+    process.exitCode = 1;
 });

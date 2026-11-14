@@ -8,15 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/login.css">
-  <link rel="stylesheet" href="tema.css">
-  <script src="assets/preferencias.js"></script>
+  <link rel="stylesheet" href="/assets/css/login.css">
+  <link rel="stylesheet" href="/assets/css/tema.css">
+  <script src="/assets/js/preferencias.js"></script>
 </head>
 
 <body class="lg-page">
-  <header class="lg-header">
+  <header class="lg-header lg-header--nav">
     <a class="lg-logo" href="04-inicio.html" aria-label="Librárvore - página inicial">
-      <img src="assets/img/login-logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="230" height="75">
+      <img src="/assets/img/login-logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="230" height="75">
     </a>
 
     <input type="checkbox" id="lg-menu-toggle" class="lg-menu-toggle">
@@ -40,12 +40,12 @@
     <section class="lg-card" aria-labelledby="lg-titulo">
       <h1 class="lg-card__titulo" id="lg-titulo">Login</h1>
 
-      <form class="lg-form" id="formLogin">
+      <form class="lg-form" id="formLogin" action="/api/login" method="post">
         <div id="msgLogin" class="lg-erro escondido" role="alert" aria-live="polite"></div>
 
         <div class="lg-campo">
           <label class="lg-sr-only" for="email">Email</label>
-          <input class="lg-campo__input" type="email" id="email" name="email"
+          <input class="lg-campo__input" type="email" id="email" name="login"
                  placeholder="Email" autocomplete="username" required>
           <svg class="lg-campo__icone lg-campo__icone--email" viewBox="0 0 22 17" width="22" height="17" aria-hidden="true" focusable="false">
             <rect x="0.75" y="0.75" width="20.5" height="15.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
@@ -82,6 +82,6 @@
     </section>
   </main>
 
-  <script src="assets/js/backend.js"></script>
+  <script src="/assets/js/backend.js"></script>
 </body>
 </html>

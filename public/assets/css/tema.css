@@ -1,0 +1,60 @@
+
+/* =========================================================
+   Librárvore - Tema (Claro/Escuro) e tamanho do texto (Pequeno/Médio/Grande)
+   Carregar DEPOIS de librarvore.css, telas.css e login.css.
+   O JavaScript (assets/js/preferencias.js) define no <html>:
+     data-tema="claro|escuro"     data-tamanho="pequeno|medio|grande"
+   Padrão: tema claro e tamanho médio.
+   ========================================================= */
+
+:root {
+  --us-escala: 1;                          /* Médio (padrão) */
+  --us-marrom-rgb: 81, 54, 24;             /* cor do texto em RGB (para bordas/transparências) */
+  --us-floresta-rgb: 66, 77, 50;
+  --us-barra-rgb: 84, 93, 61;
+  --us-texto-sobre-dourado: #513618;       /* texto de botões dourados nos dois temas */
+  --us-borda-prateleira: #513618;
+  --lg-erro: #b5473a;
+  --lg-sucesso: #5c6b3a;
+  color-scheme: light;
+}
+
+/* ----- tamanho do texto ----- */
+html[data-tamanho="pequeno"] { --us-escala: 0.88; }
+html[data-tamanho="medio"]   { --us-escala: 1; }
+html[data-tamanho="grande"]  { --us-escala: 1.15; }
+
+/* ----- tema escuro (cores adaptadas, não apenas invertidas) ----- */
+html[data-tema="escuro"] {
+  color-scheme: dark;
+  --us-marrom-cafe: #f1e6c8;
+  --us-creme-pagina: #1e2318;
+  --us-creme-menu: #262c1f;
+  --us-verde-floresta: #1f2718;
+  --us-verde-card: #39452e;
+  --us-verde-salvia: #5a6643;
+  --us-verde-barra: #2b3320;
+  --us-verde-rodape: #12160d;
+  --us-madeira: #4d3f2b;
+  --us-borda-prateleira: #6e5b3e;
+  --us-marrom-rgb: 241, 230, 200;
+  --us-floresta-rgb: 31, 39, 24;
+  --us-barra-rgb: 43, 51, 32;
+  /* login e recuperação de senha */
+  --lg-texto: #f1e6c8;
+  --lg-nav-ativo: #f1e6c8;
+  --lg-card: rgba(22, 28, 16, 0.62);
+  --lg-borda-card: #5a6643;
+  --lg-erro: #ff9d8c;
+  --lg-sucesso: #b4cc84;
+}
+html[data-tema="escuro"] .lg-page::before { content: ''; position: fixed; inset: 0; z-index: 0; background: rgba(10, 14, 6, 0.5); pointer-events: none; }
+.lg-main { position: relative; z-index: 1; }
+
+/* ----- logo: versão colorida no claro, branca no escuro ----- */
+.us-logo--escuro { display: none !important; }
+html[data-tema="escuro"] .us-logo--claro { display: none !important; }
+html[data-tema="escuro"] .us-logo--escuro { display: block !important; }
+
+/* logo branca (horizontal) no menu lateral do tema escuro */
+.us-sidebar__logo .us-logo--escuro { height: 58px !important; width: 170px !important; max-width: 100%; object-fit: contain; }

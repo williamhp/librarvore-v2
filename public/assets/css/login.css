@@ -13,13 +13,14 @@
 }
 
 .lg-page, .lg-page *, .lg-page *::before, .lg-page *::after { box-sizing: border-box; }
+.lg-page [hidden] { display: none !important; }
 
 /* FUNDO DA BIBLIOTECA GLOBAL */
 body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background-image: url('assets/img/fundo-biblioteca.jpg');
+  background-image: url('/assets/img/fundo-biblioteca.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -66,7 +67,7 @@ body {
 .lg-hamburger { display: none; }
 .lg-nav { display: flex; align-items: center; gap: 28px; color: var(--lg-branco); }
 .lg-nav__lista { display: flex; align-items: center; gap: 24px; }
-.lg-nav__link { font-size: 16px; font-weight: 500; transition: opacity .2s ease; }
+.lg-nav__link { font-size: calc(16px * var(--us-escala, 1)); font-weight: 500; transition: opacity .2s ease; }
 .lg-nav__link:hover, .lg-nav__link--ativo { opacity: .75; }
 .lg-nav__login {
   padding: 9px 22px; border: 1px solid rgba(255,255,255,.75); border-radius: 24px;
@@ -100,19 +101,19 @@ body {
 }
 
 .lg-card__titulo {
-  margin: 0 0 20px; text-align: center; font-size: 40px; font-weight: 700;
+  margin: 0 0 20px; text-align: center; font-size: calc(40px * var(--us-escala, 1)); font-weight: 700;
   color: var(--lg-texto); letter-spacing: -1px;
 }
 
-.lg-texto { margin: 0 0 20px; text-align: center; font-size: 17px; line-height: 1.5; }
-.lg-erro { display: flex; align-items: flex-start; gap: 8px; margin: -12px 0 18px; color: var(--lg-erro, #b5473a); font-size: 14px; line-height: 1.4; }
+.lg-texto { margin: 0 0 20px; text-align: center; font-size: calc(17px * var(--us-escala, 1)); line-height: 1.5; }
+.lg-erro { display: flex; align-items: flex-start; gap: 8px; margin: -12px 0 18px; color: var(--lg-erro, #b5473a); font-size: calc(14px * var(--us-escala, 1)); line-height: 1.4; }
 .lg-erro svg { flex: none; width: 16px; height: 16px; margin-top: 1px; }
 .lg-erro[hidden] { display: none; }
 .lg-form [data-form-status]:empty { display: none; }
 .lg-form [data-form-status]:not(:empty) { margin: 0 0 16px; text-align: center; }
 .lg-link-voltar, .lg-link-texto {
   display: block; margin: 18px auto 0; color: var(--lg-texto); font: inherit;
-  font-size: 15px; font-weight: 600; text-align: center; text-decoration: underline !important;
+  font-size: calc(15px * var(--us-escala, 1)); font-weight: 600; text-align: center; text-decoration: underline !important;
 }
 .lg-link-texto { border: 0; background: transparent; cursor: pointer; }
 .lg-link-voltar:hover, .lg-link-texto:hover { opacity: .75; }
@@ -128,7 +129,7 @@ body {
   width: 100%; height: 100%; padding: 0 40px 4px 12px; margin: 0;
   border: 0; border-bottom: 2px solid rgba(81, 54, 24, 0.4);
   border-radius: 0; background: transparent;
-  font-family: inherit; font-size: 18px; font-weight: 500;
+  font-family: inherit; font-size: calc(18px * var(--us-escala, 1)); font-weight: 500;
   color: var(--lg-texto); -webkit-appearance: none; appearance: none;
   transition: border-color 0.3s;
 }
@@ -142,7 +143,7 @@ body {
 /* Opções */
 .lg-opcoes {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 8px 12px; margin-bottom: 30px; font-size: 15px;
+  gap: 8px 12px; margin-bottom: 30px; font-size: calc(15px * var(--us-escala, 1));
 }
 .lg-lembrar { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
 .lg-lembrar__input {
@@ -163,7 +164,7 @@ body {
   display: block; width: 100%; height: 54px;
   margin: 0 auto; border: 0; border-radius: 12px;
   background: var(--lg-botao); color: var(--lg-branco);
-  font-family: inherit; font-size: 20px; font-weight: 700;
+  font-family: inherit; font-size: calc(20px * var(--us-escala, 1)); font-weight: 700;
   box-shadow: 0 8px 20px rgba(217, 165, 68, 0.4);
   cursor: pointer; transition: all 0.2s ease;
 }
@@ -172,7 +173,7 @@ body {
 
 /* Cadastro */
 .lg-cadastro {
-  margin: 24px 0 0; text-align: center; font-size: 17px; font-weight: 500;
+  margin: 24px 0 0; text-align: center; font-size: calc(17px * var(--us-escala, 1)); font-weight: 500;
 }
 .lg-cadastro__link {
   font-weight: 700; color: var(--lg-link-destaque);
@@ -212,6 +213,6 @@ body {
 }
 @media (max-width: 480px) {
   .lg-card { padding: 30px 24px; border-radius: 20px; }
-  .lg-card__titulo { font-size: 32px; }
-  .lg-texto { font-size: 16px; }
+  .lg-card__titulo { font-size: calc(32px * var(--us-escala, 1)); }
+  .lg-texto { font-size: calc(16px * var(--us-escala, 1)); }
 }

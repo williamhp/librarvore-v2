@@ -38,6 +38,9 @@ const arquivosCompartilhados = {
     '/assets/img/logo-librarvore-branca.png': path.join(__dirname, 'logo-librarvore-branca.png'),
     '/assets/img/logo-librarvore-colorida.png': path.join(__dirname, 'logo-librarvore-colorida.png'),
     '/assets/img/logo-librarvore.png': path.join(__dirname, 'logo-librarvore.png'),
+    '/assets/img/fundo-biblioteca.jpg': path.join(__dirname, 'fundo-biblioteca.jpg'),
+    '/assets/js/preferencias.js': path.join(__dirname, 'assets/preferencias.js'),
+    '/assets/js/leitura.js': path.join(__dirname, 'assets/leitura.js'),
     '/leitor.js': path.join(__dirname, 'leitor.js')
 };
 

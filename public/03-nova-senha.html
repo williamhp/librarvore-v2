@@ -7,9 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="login.css">
-  <link rel="stylesheet" href="tema.css">
-  <script src="assets/preferencias.js"></script>
+  <link rel="stylesheet" href="/assets/css/login.css">
+  <link rel="stylesheet" href="/assets/css/tema.css">
+  <script src="/assets/js/preferencias.js"></script>
 </head>
 <body class="lg-page">
 
@@ -44,16 +44,16 @@
       <div data-estado="nova-senha">
         <h1 class="lg-card__titulo" id="lg-titulo">Crie uma nova senha</h1>
         <p class="lg-texto">Escolha uma senha nova para acessar a sua conta.</p>
-        <form class="lg-form" id="form-nova-senha" action="#" method="post">
+        <form class="lg-form" id="form-nova-senha" action="/api/redefinir-senha" method="post">
           <input type="hidden" name="token" value="">
           <div class="lg-campo">
             <label class="lg-sr-only" for="lg-nova">Nova senha</label>
-            <input class="lg-campo__input" type="password" id="lg-nova" name="nova_senha" placeholder="Nova senha" autocomplete="new-password" minlength="8" required>
+            <input class="lg-campo__input" type="password" id="lg-nova" name="nova_senha" placeholder="Nova senha" autocomplete="new-password" minlength="8" maxlength="128" required>
             <svg class="lg-campo__icone lg-campo__icone--senha" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true" focusable="false"><path d="M5.5 13V9a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.75" y="13" width="16.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="19" r="1.6" fill="currentColor"/></svg>
           </div>
           <div class="lg-campo">
             <label class="lg-sr-only" for="lg-confirma">Confirmar nova senha</label>
-            <input class="lg-campo__input" type="password" id="lg-confirma" name="confirmar_senha" placeholder="Confirmar nova senha" autocomplete="new-password" minlength="8" required>
+            <input class="lg-campo__input" type="password" id="lg-confirma" name="confirmar_senha" placeholder="Confirmar nova senha" autocomplete="new-password" minlength="8" maxlength="128" required>
             <svg class="lg-campo__icone lg-campo__icone--senha" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true" focusable="false"><path d="M5.5 13V9a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.75" y="13" width="16.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="19" r="1.6" fill="currentColor"/></svg>
           </div>
           <p class="lg-texto" role="status" data-form-status></p>
@@ -69,6 +69,6 @@
     </section>
   </main>
 
-  <script src="assets/auth.js"></script>
+  <script src="/assets/js/auth.js"></script>
 </body>
 </html>

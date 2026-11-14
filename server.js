@@ -3,7 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
-const pool = require('./db');
+const registrarRotasPagina = require('./routes/pageRoutes');
+const registrarRotasApi = require('./routes/apiRoutes');
 
 const app = express();
 const PORTA = Number(process.env.PORT) || 3000;
@@ -20,15 +21,32 @@ app.use(session({
     cookie: { secure: false, httpOnly: true, sameSite: 'lax' }
 }));
 
+// ---------- Rotas ----------
+registrarRotasPagina(app);
+registrarRotasApi(app, PORTA);
+
 // ---------- Arquivos Estáticos ----------
-// Serve a pasta 'public' (HTMLs, CSS, JS, imagens)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
-// Redirecionamentos amigáveis
-app.get('/', (_, res) => res.redirect('/01-login.html'));
-app.get('/login', (_, res) => res.redirect('/01-login.html'));
-app.get('/acervo', (_, res) => res.redirect('/03-acervo.html')); // ou 05-acervo.html, dependendo do seu fluxo
+const arquivosCompartilhados = {
+    '/login.css': path.join(__dirname, 'public/assets/css/login.css'),
+    '/librarvore.css': path.join(__dirname, 'librarvore.css'),
+    '/telas.css': path.join(__dirname, 'telas.css'),
+    '/estilo.css': path.join(__dirname, 'estilo.css'),
+    '/assets/css/tema.css': path.join(__dirname, 'tema.css'),
+    '/assets/img/logo-librarvore-branca.png': path.join(__dirname, 'logo-librarvore-branca.png'),
+    '/assets/img/logo-librarvore-colorida.png': path.join(__dirname, 'logo-librarvore-colorida.png'),
+    '/assets/img/logo-librarvore.png': path.join(__dirname, 'logo-librarvore.png'),
+    '/leitor.js': path.join(__dirname, 'leitor.js')
+};
 
-// ---------- Rotas da API ----------
-// (Aqui você mantém as rotas que já funcionam no seu server.js: /api/login, /api/livros, etc.)
-// ...
+for (const [rota, arquivo] of Object.entries(arquivosCompartilhados)) {
+    app.get(rota, (_, res) => res.sendFile(arquivo));
+}
+
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
+
+app.listen(PORTA, '0.0.0.0', () => {
+    console.log(`Librárvore disponível em http://localhost:${PORTA}`);
+});

@@ -10,59 +10,7 @@
   <link rel="stylesheet" href="login.css">
   <link rel="stylesheet" href="tema.css">
   <script src="assets/preferencias.js"></script>
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('form-esqueci');
-    const divPreenchimento = document.querySelector('[data-estado="preenchimento"]');
-    const divConfirmacao = document.querySelector('[data-estado="confirmacao"]');
-    const msgErro = document.getElementById('lg-erro-email');
-    
-    if (!form) return;
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('lg-email').value.trim();
-        if (!email) return;
-
-        const btn = form.querySelector('button[type="submit"]');
-        const textoOriginal = btn.textContent;
-        btn.textContent = 'Enviando...';
-        btn.disabled = true;
-        if (msgErro) msgErro.hidden = true;
-
-        try {
-            const resposta = await fetch('/api/recuperar-senha', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
-            });
-
-            const dados = await resposta.json();
-
-            if (!resposta.ok) {
-                throw new Error(dados.erro || 'Erro ao enviar e-mail.');
-            }
-
-            // Sucesso: troca para a tela de confirmação
-            if (divPreenchimento) divPreenchimento.hidden = true;
-            if (divConfirmacao) divConfirmacao.hidden = false;
-
-        } catch (erro) {
-            if (msgErro) {
-                msgErro.querySelector('span').textContent = erro.message;
-                msgErro.hidden = false;
-            } else {
-                alert(erro.message);
-            }
-        } finally {
-            btn.textContent = textoOriginal;
-            btn.disabled = false;
-        }
-    });
-});
-</script>
-</head>
+  </head>
 <body class="lg-page">
 
   <!-- ESTADOS (alternados por assets/js/auth.js): preenchimento -> confirmação; e-mail inválido aparece no próprio formulário -->

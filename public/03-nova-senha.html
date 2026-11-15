@@ -10,6 +10,79 @@
   <link rel="stylesheet" href="/assets/css/login.css">
   <link rel="stylesheet" href="/assets/css/tema.css">
   <script src="/assets/js/preferencias.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-nova-senha');
+    const divNovaSenha = document.querySelector('[data-estado="nova-senha"]');
+    const divSucesso = document.querySelector('[data-estado="senha-redefinida"]');
+    const inputToken = document.querySelector('input[name="token"]');
+    const statusText = document.querySelector('[data-form-status]');
+
+    if (!form) return;
+
+    // Pega o token da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (!token) {
+        if (statusText) {
+            statusText.textContent = 'Link inválido. Solicite a recuperação novamente.';
+            statusText.style.color = 'red';
+        }
+        form.querySelector('button[type="submit"]').disabled = true;
+        return;
+    }
+
+    if (inputToken) inputToken.value = token;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const novaSenha = document.getElementById('lg-nova').value;
+        const confirmarSenha = document.getElementById('lg-confirma').value;
+
+        if (novaSenha !== confirmarSenha) {
+            if (statusText) {
+                statusText.textContent = 'As senhas não coincidem.';
+                statusText.style.color = 'red';
+            }
+            return;
+        }
+
+        const btn = form.querySelector('button[type="submit"]');
+        const textoOriginal = btn.textContent;
+        btn.textContent = 'Salvando...';
+        btn.disabled = true;
+
+        try {
+            const resposta = await fetch('/api/redefinir-senha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, nova_senha: novaSenha })
+            });
+
+            const dados = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(dados.erro || 'Erro ao redefinir senha.');
+            }
+
+            // Sucesso: troca para tela de sucesso
+            if (divNovaSenha) divNovaSenha.hidden = true;
+            if (divSucesso) divSucesso.hidden = false;
+
+        } catch (erro) {
+            if (statusText) {
+                statusText.textContent = erro.message;
+                statusText.style.color = 'red';
+            }
+        } finally {
+            btn.textContent = textoOriginal;
+            btn.disabled = false;
+        }
+    });
+});
+</script>
 </head>
 <body class="lg-page">
 

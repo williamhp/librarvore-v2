@@ -1,102 +1,182 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Esqueci minha senha | Librárvore</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="login.css">
-  <link rel="stylesheet" href="tema.css">
-  <script src="assets/preferencias.js"></script>
-</head>
-<body class="lg-page">
+(function () {
+  'use strict';
 
-  <!-- ESTADOS (alternados por assets/js/auth.js): preenchimento -> confirmação; e-mail inválido aparece no próprio formulário -->
-  <!-- ===== Barra superior ===== -->
-  <header class="lg-header lg-header--nav">
-    <a class="lg-logo" href="04-inicio.html" aria-label="Librárvore - página inicial">
-      <!-- Logo branca com fundo transparente (assets/img/logo-librarvore-branca.png) -->
-      <img src="assets/img/logo-librarvore-branca.png" alt="Librárvore - Livraria + Biblioteca" width="230" height="75">
-    </a>
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    <!-- Menu hambúrguer (somente telas pequenas) - funciona só com CSS, sem JavaScript -->
-    <input type="checkbox" id="lg-menu-toggle" class="lg-menu-toggle">
-    <label for="lg-menu-toggle" class="lg-hamburger">
-      <span class="lg-sr-only">Abrir ou fechar o menu</span>
-      <span class="lg-hamburger__barras" aria-hidden="true"></span>
-    </label>
+  function exibirStatus(elemento, mensagem, erro) {
+    if (!elemento) return;
+    elemento.textContent = mensagem;
+    elemento.setAttribute('aria-live', 'polite');
+    elemento.classList.toggle('lg-erro', Boolean(erro));
+  }
 
-    <nav class="lg-nav" aria-label="Menu principal">
-      <ul class="lg-nav__lista">
-        <!-- TODO: trocar os href="#" pelas rotas reais do projeto -->
-        <li><a class="lg-nav__link lg-nav__link--ativo" href="04-inicio.html">Inicio</a></li>
-        <li><a class="lg-nav__link" href="05-acervo.html">Acervo</a></li>
-        <li><a class="lg-nav__link" href="#">Sobre</a></li>
-        <li><a class="lg-nav__link" href="#">Contato</a></li>
-      </ul>
-      <a class="lg-nav__login" href="01-login.html">Login</a>
-    </nav>
-  </header>
+  async function solicitarRecuperacao(email) {
+    var resposta = await fetch('/api/recuperar-senha', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    });
+    var dados = await resposta.json().catch(function () { return {}; });
+    if (!resposta.ok) throw new Error(dados.erro || 'Não foi possível solicitar a recuperação.');
+    return dados;
+  }
 
-  <main class="lg-main" id="conteudo">
-    <section class="lg-card lg-card--auth" aria-labelledby="lg-titulo">
+  // ── Recuperação de senha: passo 1 (e-mail) ──────────────────────────────────
+  var formularioRecuperacao = document.getElementById('form-esqueci');
+  if (formularioRecuperacao) {
+    var emailInput   = formularioRecuperacao.querySelector('input[type="email"]');
+    var erroEmail    = document.getElementById('lg-erro-email');
+    var statusEtapa1 = formularioRecuperacao.querySelector('[data-form-status]');
+    var estadoEmail  = document.querySelector('[data-estado="preenchimento"]');
+    var estadoCodigo = document.querySelector('[data-estado="verificacao"]');
 
-      <!-- Estado 1: informar e-mail -->
-      <div data-estado="preenchimento">
-        <h1 class="lg-card__titulo" id="lg-titulo">Esqueceu sua senha?</h1>
-        <p class="lg-texto">Informe o e-mail cadastrado para receber o código de verificação.</p>
-        <form class="lg-form" id="form-esqueci" action="#" method="post" novalidate>
-          <div class="lg-campo" data-campo>
-            <label class="lg-sr-only" for="lg-email">E-mail cadastrado</label>
-            <input class="lg-campo__input" type="email" id="lg-email" name="email" placeholder="Email" autocomplete="email" required aria-describedby="lg-erro-email" aria-invalid="false">
-            <svg class="lg-campo__icone lg-campo__icone--email" viewBox="0 0 22 17" width="22" height="17" aria-hidden="true" focusable="false"><rect x="0.75" y="0.75" width="20.5" height="15.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 2l9.5 7.5L20.5 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-          </div>
-          <p class="lg-erro" id="lg-erro-email" role="alert" hidden>
-            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5v4M8 11h.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            <span>Informe um e-mail válido, por exemplo: nome@exemplo.com.</span>
-          </p>
-          <p class="lg-texto" role="status" data-form-status></p>
-          <button class="lg-botao" type="submit">Enviar código</button>
-          <a class="lg-link-voltar" href="01-login.html">Voltar para o login</a>
-        </form>
-      </div>
+    function validarEmail() {
+      var valido = EMAIL.test(emailInput.value.trim());
+      if (erroEmail) erroEmail.hidden = valido;
+      emailInput.setAttribute('aria-invalid', valido ? 'false' : 'true');
+      return valido;
+    }
 
-      <!-- Estado 2: inserir código recebido por e-mail -->
-      <div data-estado="verificacao" hidden>
-        <div class="lg-confirmacao-icone">
-          <svg viewBox="0 0 36 36" width="36" height="36" aria-hidden="true" focusable="false"><rect x="3" y="7" width="30" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 9l14 10L32 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h1 class="lg-card__titulo" id="lg-titulo-verificacao">Verifique seu e-mail</h1>
-        <p class="lg-texto">Enviamos um código de 6 dígitos para <strong data-email-destino></strong>. Digite-o abaixo para confirmar que a conta é sua.</p>
-        <form class="lg-form" id="form-verificacao" action="#" method="post" novalidate>
-          <div class="lg-campo" data-campo>
-            <label class="lg-sr-only" for="lg-codigo">Código de verificação</label>
-            <input class="lg-campo__input" type="text" id="lg-codigo" name="codigo"
-                   placeholder="Código de 6 dígitos"
-                   inputmode="numeric" pattern="\d{6}" maxlength="6"
-                   autocomplete="one-time-code" required
-                   aria-describedby="lg-erro-codigo" aria-invalid="false">
-            <svg class="lg-campo__icone" viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false">
-              <rect x="1" y="5" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M6 11h10M6 15h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <p class="lg-erro" id="lg-erro-codigo" role="alert" hidden>
-            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5v4M8 11h.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            <span>Informe o código de 6 dígitos enviado para o seu e-mail.</span>
-          </p>
-          <p class="lg-texto" role="status" data-form-status></p>
-          <button class="lg-botao" type="submit">Confirmar código</button>
-          <button class="lg-link-texto" type="button" data-acao="reenviar">Não recebeu? Reenviar código</button>
-          <a class="lg-link-voltar" href="01-login.html">Voltar para o login</a>
-        </form>
-      </div>
+    emailInput.addEventListener('input', validarEmail);
 
-    </section>
-  </main>
+    formularioRecuperacao.addEventListener('submit', async function (evento) {
+      evento.preventDefault();
+      if (!validarEmail()) { emailInput.focus(); return; }
 
-  <script src="assets/auth.js"></script>
-</body>
-</html>
+      var botao = formularioRecuperacao.querySelector('[type="submit"]');
+      botao.disabled = true;
+      exibirStatus(statusEtapa1, '', false);
+
+      try {
+        await solicitarRecuperacao(emailInput.value.trim());
+        var destino = estadoCodigo && estadoCodigo.querySelector('[data-email-destino]');
+        if (destino) destino.textContent = emailInput.value.trim();
+        if (estadoEmail)  estadoEmail.hidden  = true;
+        if (estadoCodigo) estadoCodigo.hidden = false;
+        var codigoInput = document.getElementById('lg-codigo');
+        if (codigoInput) codigoInput.focus();
+      } catch (erro) {
+        exibirStatus(statusEtapa1, erro.message, true);
+      } finally {
+        botao.disabled = false;
+      }
+    });
+  }
+
+  // ── Recuperação de senha: passo 2 (código) ──────────────────────────────────
+  var formularioVerificacao = document.getElementById('form-verificacao');
+  if (formularioVerificacao) {
+    var codigoInput  = document.getElementById('lg-codigo');
+    var erroCodigo   = document.getElementById('lg-erro-codigo');
+    var statusEtapa2 = formularioVerificacao.querySelector('[data-form-status]');
+
+    codigoInput.addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, 6);
+      var valido = /^\d{6}$/.test(this.value);
+      if (erroCodigo) erroCodigo.hidden = valido || this.value.length === 0;
+      this.setAttribute('aria-invalid', valido ? 'false' : 'true');
+    });
+
+    formularioVerificacao.addEventListener('submit', async function (evento) {
+      evento.preventDefault();
+      var codigo = codigoInput.value.trim();
+      if (!/^\d{6}$/.test(codigo)) {
+        if (erroCodigo) erroCodigo.hidden = false;
+        codigoInput.setAttribute('aria-invalid', 'true');
+        codigoInput.focus();
+        return;
+      }
+
+      var botao = formularioVerificacao.querySelector('[type="submit"]');
+      botao.disabled = true;
+      exibirStatus(statusEtapa2, '', false);
+
+      var emailEl  = document.getElementById('lg-email');
+      var emailVal = emailEl ? emailEl.value.trim() : '';
+
+      try {
+        var resposta = await fetch('/api/verificar-codigo', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailVal, codigo: codigo })
+        });
+        var dados = await resposta.json().catch(function () { return {}; });
+        if (!resposta.ok) throw new Error(dados.erro || 'Código inválido ou expirado.');
+        // Avança para o passo 3 na mesma página
+        document.querySelector('[data-estado="verificacao"]').hidden = true;
+        document.querySelector('[data-estado="nova-senha"]').hidden  = false;
+        document.getElementById('lg-nova').focus();
+      } catch (erro) {
+        exibirStatus(statusEtapa2, erro.message, true);
+      } finally {
+        botao.disabled = false;
+      }
+    });
+
+    var reenviar = document.querySelector('[data-acao="reenviar"]');
+    if (reenviar) {
+      reenviar.addEventListener('click', async function () {
+        reenviar.disabled = true;
+        exibirStatus(statusEtapa2, '', false);
+        var emailEl  = document.getElementById('lg-email');
+        var emailVal = emailEl ? emailEl.value.trim() : '';
+        try {
+          await solicitarRecuperacao(emailVal);
+          exibirStatus(statusEtapa2, 'Código reenviado! Confira também a caixa de spam.', false);
+        } catch (erro) {
+          exibirStatus(statusEtapa2, erro.message, true);
+        } finally {
+          reenviar.disabled = false;
+        }
+      });
+    }
+  }
+
+  // ── Recuperação de senha: passo 3 (nova senha) ──────────────────────────────
+  var formularioSenha = document.getElementById('form-nova-senha');
+  if (formularioSenha) {
+    var erroConfirma = document.getElementById('lg-erro-confirma');
+    var statusEtapa3 = formularioSenha.querySelector('[data-form-status]');
+    var botaoSenha   = formularioSenha.querySelector('[type="submit"]');
+
+    formularioSenha.addEventListener('submit', async function (evento) {
+      evento.preventDefault();
+      var nova      = formularioSenha.elements.nova_senha.value;
+      var confirma  = formularioSenha.elements.confirmar_senha.value;
+
+      if (nova !== confirma) {
+        if (erroConfirma) erroConfirma.hidden = false;
+        formularioSenha.elements.confirmar_senha.setAttribute('aria-invalid', 'true');
+        formularioSenha.elements.confirmar_senha.focus();
+        return;
+      }
+      if (erroConfirma) erroConfirma.hidden = true;
+      formularioSenha.elements.confirmar_senha.setAttribute('aria-invalid', 'false');
+
+      var emailEl  = document.getElementById('lg-email');
+      var emailVal = emailEl ? emailEl.value.trim() : '';
+
+      botaoSenha.disabled = true;
+      exibirStatus(statusEtapa3, '', false);
+
+      try {
+        var resposta = await fetch('/api/redefinir-senha', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailVal, nova_senha: nova })
+        });
+        var dados = await resposta.json().catch(function () { return {}; });
+        if (!resposta.ok) throw new Error(dados.erro || 'Não foi possível redefinir a senha.');
+        document.querySelector('[data-estado="nova-senha"]').hidden      = true;
+        document.querySelector('[data-estado="senha-redefinida"]').hidden = false;
+      } catch (erro) {
+        exibirStatus(statusEtapa3, erro.message, true);
+      } finally {
+        botaoSenha.disabled = false;
+      }
+    });
+  }
+})();

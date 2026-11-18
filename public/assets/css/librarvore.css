@@ -248,6 +248,30 @@
   background: none !important;
   padding: 0 !important;
 }
+
+/* Placeholder de carregamento para capas reais */
+.us-capa[data-capa-status="carregando"] {
+  background-color: #c8c09a !important;
+  background-image:
+    linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%) !important;
+  background-size: 200% 100% !important;
+  animation: us-capa-shimmer 1.4s infinite linear;
+  padding: 0 !important;
+}
+@keyframes us-capa-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+.us-capa[data-capa-status="ok"] {
+  background: none !important;
+  padding: 0 !important;
+}
+.us-capa[data-capa-status="ok"] img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+.us-capa[data-capa-status="erro"] {
+  /* mantém o fundo padrão com gradiente/logo para fallback */
+}
 .us-card-lista__capa-area .us-capa:not(:has(img)) { display: flex; }
 .us-capa--prateleira { width: 116px; }
 

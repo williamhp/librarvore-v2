@@ -22,96 +22,83 @@
     return dados;
   }
 
+  // ── 02-esqueci-senha: verifica o e-mail e redireciona para 03-nova-senha ─────
   var formularioRecuperacao = document.getElementById('form-esqueci');
   if (formularioRecuperacao) {
-    var email = formularioRecuperacao.querySelector('input[type="email"]');
-    var erroEmail = document.getElementById('lg-erro-email');
-    var statusRecuperacao = formularioRecuperacao.querySelector('[data-form-status]');
-    var preenchimento = document.querySelector('[data-estado="preenchimento"]');
-    var confirmacao = document.querySelector('[data-estado="confirmacao"]');
-    var statusReenvio = confirmacao && confirmacao.querySelector('[data-form-status]');
+    var emailInput   = formularioRecuperacao.querySelector('input[type="email"]');
+    var erroEmail    = document.getElementById('lg-erro-email');
+    var statusEtapa1 = formularioRecuperacao.querySelector('[data-form-status]');
 
     function validarEmail() {
-      var valido = EMAIL.test(email.value.trim());
+      var valido = EMAIL.test(emailInput.value.trim());
       if (erroEmail) erroEmail.hidden = valido;
-      email.setAttribute('aria-invalid', valido ? 'false' : 'true');
+      emailInput.setAttribute('aria-invalid', valido ? 'false' : 'true');
       return valido;
     }
 
-    email.addEventListener('input', validarEmail);
+    emailInput.addEventListener('input', validarEmail);
 
-    async function enviarLink(botao) {
-      if (!validarEmail()) {
-        email.focus();
-        return;
-      }
-
-      if (botao) botao.disabled = true;
-      exibirStatus(statusRecuperacao, '', false);
-      try {
-        await solicitarRecuperacao(email.value.trim());
-        if (preenchimento) preenchimento.hidden = true;
-        if (confirmacao) confirmacao.hidden = false;
-      } catch (erro) {
-        exibirStatus(statusRecuperacao, erro.message, true);
-      } finally {
-        if (botao) botao.disabled = false;
-      }
-    }
-
-    formularioRecuperacao.addEventListener('submit', function (evento) {
+    formularioRecuperacao.addEventListener('submit', async function (evento) {
       evento.preventDefault();
-      enviarLink(formularioRecuperacao.querySelector('[type="submit"]'));
-    });
+      if (!validarEmail()) { emailInput.focus(); return; }
 
-    var reenviar = document.querySelector('[data-acao="reenviar"]');
-    if (reenviar) {
-      reenviar.addEventListener('click', async function () {
-        reenviar.disabled = true;
-        try {
-          await solicitarRecuperacao(email.value.trim());
-          exibirStatus(statusReenvio, 'Se o e-mail estiver cadastrado, enviaremos outro link.', false);
-        } catch (erro) {
-          exibirStatus(statusReenvio, erro.message, true);
-        } finally {
-          reenviar.disabled = false;
-        }
-      });
-    }
+      var botao = formularioRecuperacao.querySelector('[type="submit"]');
+      botao.disabled = true;
+      exibirStatus(statusEtapa1, '', false);
+
+      try {
+        await solicitarRecuperacao(emailInput.value.trim());
+        sessionStorage.setItem('recuperacao_email', emailInput.value.trim());
+        window.location.href = '/03-nova-senha.html';
+      } catch (erro) {
+        exibirStatus(statusEtapa1, erro.message, true);
+      } finally {
+        botao.disabled = false;
+      }
+    });
   }
 
+  // ── 03-nova-senha: lê o e-mail do sessionStorage e redefine a senha ──────────
   var formularioSenha = document.getElementById('form-nova-senha');
   if (formularioSenha) {
-    var token = new URLSearchParams(window.location.search).get('token') || '';
-    formularioSenha.elements.token.value = token;
-    var statusSenha = formularioSenha.querySelector('[data-form-status]');
-    var botaoSenha = formularioSenha.querySelector('[type="submit"]');
-    if (!token) {
-      exibirStatus(statusSenha, 'Link inválido. Solicite uma nova redefinição de senha.', true);
+    var emailRecuperacao = sessionStorage.getItem('recuperacao_email') || '';
+    var erroConfirma     = document.getElementById('lg-erro-confirma');
+    var statusSenha      = formularioSenha.querySelector('[data-form-status]');
+    var botaoSenha       = formularioSenha.querySelector('[type="submit"]');
+
+    if (!emailRecuperacao) {
+      exibirStatus(statusSenha, 'Acesso inválido. Solicite uma nova redefinição de senha.', true);
       botaoSenha.disabled = true;
     }
 
     formularioSenha.addEventListener('submit', async function (evento) {
       evento.preventDefault();
-      if (formularioSenha.elements.nova_senha.value !== formularioSenha.elements.confirmar_senha.value) {
-        exibirStatus(statusSenha, 'A confirmação não corresponde à nova senha.', true);
+      var nova     = formularioSenha.elements.nova_senha.value;
+      var confirma = formularioSenha.elements.confirmar_senha.value;
+
+      if (nova !== confirma) {
+        if (erroConfirma) erroConfirma.hidden = false;
+        formularioSenha.elements.confirmar_senha.setAttribute('aria-invalid', 'true');
+        formularioSenha.elements.confirmar_senha.focus();
         return;
       }
+      if (erroConfirma) erroConfirma.hidden = true;
+      formularioSenha.elements.confirmar_senha.setAttribute('aria-invalid', 'false');
 
       botaoSenha.disabled = true;
+      exibirStatus(statusSenha, '', false);
+
       try {
         var resposta = await fetch('/api/redefinir-senha', {
           method: 'POST',
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            token: token,
-            nova_senha: formularioSenha.elements.nova_senha.value
-          })
+          body: JSON.stringify({ email: emailRecuperacao, nova_senha: nova })
         });
         var dados = await resposta.json().catch(function () { return {}; });
         if (!resposta.ok) throw new Error(dados.erro || 'Não foi possível redefinir a senha.');
-        document.querySelector('[data-estado="nova-senha"]').hidden = true;
+        sessionStorage.removeItem('recuperacao_email');
+        document.querySelector('[data-estado="nova-senha"]').hidden      = true;
         document.querySelector('[data-estado="senha-redefinida"]').hidden = false;
       } catch (erro) {
         exibirStatus(statusSenha, erro.message, true);

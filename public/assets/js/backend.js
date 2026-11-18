@@ -40,12 +40,160 @@
     return (telaLeitura ? '09-leitura.html?' : '08-detalhes-livro.html?') + params.toString();
   }
 
-  function montarCapa(titulo) {
+  // ── Paletas e ilustrações para capas estilo Art Deco ───────────────────────
+  var PALETAS = [
+    { fundo: '#7b1a1a', destaque: '#e8c97a', claro: '#f5e9c8', escuro: '#4a0f0f' }, // vermelho vinho
+    { fundo: '#1a3a4a', destaque: '#d4a94a', claro: '#e8dfc0', escuro: '#0d1f28' }, // azul petróleo
+    { fundo: '#2a4a1a', destaque: '#d9c86a', claro: '#eae5c0', escuro: '#152510' }, // verde floresta
+    { fundo: '#4a2a0a', destaque: '#e8c87a', claro: '#f5e8c5', escuro: '#2a1505' }, // marrom café
+    { fundo: '#1a1a4a', destaque: '#c8a8e8', claro: '#e5daf5', escuro: '#0d0d28' }, // azul noturno
+    { fundo: '#3a1a4a', destaque: '#e8c87a', claro: '#f0e5c8', escuro: '#1e0d28' }, // roxo
+    { fundo: '#4a3a0a', destaque: '#e0d060', claro: '#f0eab8', escuro: '#281f05' }, // dourado escuro
+    { fundo: '#1a3a2a', destaque: '#a8d8b8', claro: '#d8ede0', escuro: '#0d1e16' }, // verde água
+  ];
+
+  var ILUSTRACOES = [
+    // Olho (1984 / distopia / vigilância)
+    function (p, w, h) {
+      var cx = w / 2, cy = h * 0.38, rx = w * 0.32, ry = h * 0.14;
+      return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="none" stroke="' + p.destaque + '" stroke-width="2.5"/>' +
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (ry * 0.55) + '" fill="' + p.destaque + '"/>' +
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (ry * 0.25) + '" fill="' + p.escuro + '"/>' +
+        '<line x1="' + (cx - rx) + '" y1="' + cy + '" x2="' + (cx + rx) + '" y2="' + cy + '" stroke="' + p.destaque + '" stroke-width="1" opacity="0.4"/>';
+    },
+    // Navio / caravela (aventura / história)
+    function (p, w, h) {
+      var cx = w / 2, base = h * 0.58;
+      return '<path d="M' + (cx - w * 0.3) + ' ' + base + ' Q' + cx + ' ' + (base + h * 0.1) + ' ' + (cx + w * 0.3) + ' ' + base + ' Z" fill="' + p.destaque + '"/>' +
+        '<line x1="' + cx + '" y1="' + (base - h * 0.35) + '" x2="' + cx + '" y2="' + base + '" stroke="' + p.claro + '" stroke-width="2"/>' +
+        '<path d="M' + cx + ' ' + (base - h * 0.33) + ' L' + (cx + w * 0.22) + ' ' + (base - h * 0.15) + ' L' + cx + ' ' + (base - h * 0.1) + ' Z" fill="' + p.claro + '" opacity="0.9"/>' +
+        '<path d="M' + cx + ' ' + (base - h * 0.33) + ' L' + (cx - w * 0.18) + ' ' + (base - h * 0.18) + ' L' + cx + ' ' + (base - h * 0.12) + ' Z" fill="' + p.claro + '" opacity="0.7"/>' +
+        '<path d="M' + (w * 0.05) + ' ' + (base + h * 0.04) + ' Q' + (w * 0.25) + ' ' + (base + h * 0.01) + ' ' + (w * 0.5) + ' ' + (base + h * 0.04) + ' Q' + (w * 0.75) + ' ' + (base + h * 0.07) + ' ' + (w * 0.95) + ' ' + (base + h * 0.04) + '" fill="none" stroke="' + p.destaque + '" stroke-width="1.5" opacity="0.5"/>';
+    },
+    // Megafone / discurso (política / sociedade)
+    function (p, w, h) {
+      var cx = w / 2, cy = h * 0.38;
+      return '<rect x="' + (cx - w * 0.08) + '" y="' + (cy - h * 0.08) + '" width="' + (w * 0.16) + '" height="' + (h * 0.2) + '" rx="3" fill="' + p.destaque + '"/>' +
+        '<path d="M' + (cx + w * 0.08) + ' ' + (cy - h * 0.06) + ' L' + (cx + w * 0.28) + ' ' + (cy - h * 0.18) + ' L' + (cx + w * 0.28) + ' ' + (cy + h * 0.14) + ' L' + (cx + w * 0.08) + ' ' + (cy + h * 0.12) + ' Z" fill="' + p.destaque + '"/>' +
+        '<path d="M' + (cx + w * 0.28) + ' ' + (cy - h * 0.08) + ' Q' + (cx + w * 0.4) + ' ' + cy + ' ' + (cx + w * 0.28) + ' ' + (cy + h * 0.08) + '" fill="none" stroke="' + p.claro + '" stroke-width="2"/>' +
+        '<line x1="' + (cx - w * 0.08) + '" y1="' + (cy + h * 0.12) + '" x2="' + (cx - w * 0.08) + '" y2="' + (cy + h * 0.26) + '" stroke="' + p.destaque + '" stroke-width="4"/>';
+    },
+    // Colunas gregas (clássico / filosofia / história)
+    function (p, w, h) {
+      var base = h * 0.62, topo = h * 0.2, col = w / 5;
+      var cols = '';
+      for (var i = 1; i <= 3; i++) {
+        var x = col * i - col * 0.08;
+        cols += '<rect x="' + x + '" y="' + topo + '" width="' + (col * 0.16) + '" height="' + (base - topo) + '" fill="' + p.destaque + '" opacity="' + (i === 2 ? '1' : '0.75') + '"/>' +
+          '<rect x="' + (x - col * 0.04) + '" y="' + topo + '" width="' + (col * 0.24) + '" height="' + (h * 0.04) + '" fill="' + p.destaque + '" opacity="' + (i === 2 ? '1' : '0.75') + '"/>' +
+          '<rect x="' + (x - col * 0.04) + '" y="' + (base - h * 0.04) + '" width="' + (col * 0.24) + '" height="' + (h * 0.04) + '" fill="' + p.destaque + '" opacity="' + (i === 2 ? '1' : '0.75') + '"/>';
+      }
+      return cols + '<line x1="' + (w * 0.1) + '" y1="' + base + '" x2="' + (w * 0.9) + '" y2="' + base + '" stroke="' + p.destaque + '" stroke-width="2"/>';
+    },
+    // Montanha / horizonte (aventura / ficção científica)
+    function (p, w, h) {
+      var base = h * 0.62;
+      return '<path d="M0 ' + base + ' L' + (w * 0.3) + ' ' + (h * 0.22) + ' L' + (w * 0.55) + ' ' + (h * 0.42) + ' L' + (w * 0.7) + ' ' + (h * 0.3) + ' L' + w + ' ' + base + ' Z" fill="' + p.destaque + '" opacity="0.85"/>' +
+        '<path d="M0 ' + (base + h * 0.04) + ' L' + w + ' ' + (base + h * 0.04) + '" stroke="' + p.destaque + '" stroke-width="1.5" opacity="0.4"/>' +
+        '<circle cx="' + (w * 0.75) + '" cy="' + (h * 0.2) + '" r="' + (w * 0.1) + '" fill="' + p.destaque + '" opacity="0.6"/>' +
+        '<path d="M' + (w * 0.28) + ' ' + (h * 0.25) + ' L' + (w * 0.32) + ' ' + (h * 0.25) + ' L' + (w * 0.3) + ' ' + (h * 0.21) + ' Z" fill="' + p.claro + '"/>';
+    },
+    // Livro aberto (literatura / poesia)
+    function (p, w, h) {
+      var cx = w / 2, cy = h * 0.38;
+      return '<path d="M' + (cx - w * 0.3) + ' ' + (cy - h * 0.18) + ' L' + (cx - w * 0.02) + ' ' + (cy - h * 0.1) + ' L' + (cx - w * 0.02) + ' ' + (cy + h * 0.18) + ' L' + (cx - w * 0.3) + ' ' + (cy + h * 0.1) + ' Z" fill="' + p.destaque + '"/>' +
+        '<path d="M' + (cx + w * 0.3) + ' ' + (cy - h * 0.18) + ' L' + (cx + w * 0.02) + ' ' + (cy - h * 0.1) + ' L' + (cx + w * 0.02) + ' ' + (cy + h * 0.18) + ' L' + (cx + w * 0.3) + ' ' + (cy + h * 0.1) + ' Z" fill="' + p.destaque + '" opacity="0.8"/>' +
+        '<line x1="' + cx + '" y1="' + (cy - h * 0.1) + '" x2="' + cx + '" y2="' + (cy + h * 0.18) + '" stroke="' + p.claro + '" stroke-width="1.5"/>' +
+        '<line x1="' + (cx - w * 0.24) + '" y1="' + (cy - h * 0.06) + '" x2="' + (cx - w * 0.06) + '" y2="' + (cy - h * 0.02) + '" stroke="' + p.fundo + '" stroke-width="1" opacity="0.6"/>' +
+        '<line x1="' + (cx - w * 0.24) + '" y1="' + (cy + h * 0.02) + '" x2="' + (cx - w * 0.06) + '" y2="' + (cy + h * 0.05) + '" stroke="' + p.fundo + '" stroke-width="1" opacity="0.6"/>';
+    },
+    // Crânio / ossos (terror / suspense)
+    function (p, w, h) {
+      var cx = w / 2, cy = h * 0.35;
+      return '<ellipse cx="' + cx + '" cy="' + (cy - h * 0.02) + '" rx="' + (w * 0.22) + '" ry="' + (h * 0.2) + '" fill="' + p.destaque + '"/>' +
+        '<rect x="' + (cx - w * 0.14) + '" y="' + (cy + h * 0.15) + '" width="' + (w * 0.28) + '" height="' + (h * 0.08) + '" rx="3" fill="' + p.destaque + '"/>' +
+        '<rect x="' + (cx - w * 0.09) + '" y="' + (cy + h * 0.15) + '" width="' + (w * 0.06) + '" height="' + (h * 0.1) + '" fill="' + p.fundo + '"/>' +
+        '<rect x="' + (cx - w * 0.01) + '" y="' + (cy + h * 0.15) + '" width="' + (w * 0.06) + '" height="' + (h * 0.1) + '" fill="' + p.fundo + '"/>' +
+        '<ellipse cx="' + (cx - w * 0.09) + '" cy="' + (cy - h * 0.02) + '" rx="' + (w * 0.07) + '" ry="' + (h * 0.07) + '" fill="' + p.fundo + '"/>' +
+        '<ellipse cx="' + (cx + w * 0.09) + '" cy="' + (cy - h * 0.02) + '" rx="' + (w * 0.07) + '" ry="' + (h * 0.07) + '" fill="' + p.fundo + '"/>';
+    },
+    // Foguete / planeta (ficção científica / fantasia)
+    function (p, w, h) {
+      var cx = w / 2, cy = h * 0.4;
+      return '<ellipse cx="' + (cx + w * 0.2) + '" cy="' + (h * 0.22) + '" rx="' + (w * 0.14) + '" ry="' + (h * 0.07) + '" fill="none" stroke="' + p.destaque + '" stroke-width="1.5" opacity="0.6"/>' +
+        '<path d="M' + cx + ' ' + (cy - h * 0.22) + ' Q' + (cx + w * 0.1) + ' ' + (cy - h * 0.1) + ' ' + (cx + w * 0.08) + ' ' + (cy + h * 0.12) + ' L' + (cx - w * 0.08) + ' ' + (cy + h * 0.12) + ' Q' + (cx - w * 0.1) + ' ' + (cy - h * 0.1) + ' ' + cx + ' ' + (cy - h * 0.22) + ' Z" fill="' + p.destaque + '"/>' +
+        '<path d="M' + (cx - w * 0.08) + ' ' + (cy + h * 0.08) + ' L' + (cx - w * 0.18) + ' ' + (cy + h * 0.18) + ' L' + (cx - w * 0.02) + ' ' + (cy + h * 0.12) + ' Z" fill="' + p.destaque + '" opacity="0.7"/>' +
+        '<path d="M' + (cx + w * 0.08) + ' ' + (cy + h * 0.08) + ' L' + (cx + w * 0.18) + ' ' + (cy + h * 0.18) + ' L' + (cx + w * 0.02) + ' ' + (cy + h * 0.12) + ' Z" fill="' + p.destaque + '" opacity="0.7"/>' +
+        '<circle cx="' + cx + '" cy="' + (cy - h * 0.02) + '" r="' + (w * 0.06) + '" fill="' + p.fundo + '" stroke="' + p.claro + '" stroke-width="1.5"/>';
+    },
+  ];
+
+  function gerarHashTitulo(str) {
+    var h = 0;
+    for (var i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+
+  function montarCapa(titulo, categoria) {
+    var str = (titulo || 'Livro').toLowerCase();
+    var hash = gerarHashTitulo(str);
+    var paleta = PALETAS[hash % PALETAS.length];
+
+    // escolhe ilustração por palavra-chave do título ou categoria, senão por hash
+    var iluIdx = hash % ILUSTRACOES.length;
+    var cat = (categoria || '').toLowerCase();
+    var t = str;
+    if (/1984|distopia|vigil|polit|revol|animal|fahrenheit|laranja|conto da aia/.test(t)) iluIdx = 0;
+    else if (/navio|mar|pirat|oceano|explorac|aventur|riqueza|naç/.test(t)) iluIdx = 1;
+    else if (/administr|marketing|negoci|gestão|empresa|lider/.test(t)) iluIdx = 2;
+    else if (/administr|teoria|direito|filosofi|socrat|plat|arist|classic|greek|roman/.test(t + cat)) iluIdx = 3;
+    else if (/dun|fundac|hobbit|senhor|espaç|mochil|galáxia|solaris|neuromancer|odisseia/.test(t)) iluIdx = 7;
+    else if (/admiravel|mundo novo|ficção cient|robot|eu rob/.test(t)) iluIdx = 7;
+    else if (/ilumina|cemitér|dracul|frankenstein|corali|terror|horror|assombr|monstro/.test(t)) iluIdx = 6;
+    else if (/dom casmurro|orgulho|anna|senhora|guarani|iracema|moreninha|primo basíl|cortiç|macunaima|vidas/.test(t)) iluIdx = 5;
+    else if (/guerra|tronos|nome do vento|silmarillion|eragon|magia|feitiç|harry|brux/.test(t)) iluIdx = 4;
+    else if (/crime|castigo|silencio|codigo|anjos|garota|nome da rosa|poliicial|detetiv|assassin/.test(t)) iluIdx = 0;
+
+    var W = 124, H = 186;
+    var linhasDecor = '';
+    // linhas Art Deco no fundo
+    for (var i = 0; i < 5; i++) {
+      var y = H * 0.08 + i * H * 0.025;
+      linhasDecor += '<line x1="' + (W * 0.08) + '" y1="' + y + '" x2="' + (W * 0.92) + '" y2="' + y + '" stroke="' + paleta.destaque + '" stroke-width="0.5" opacity="0.2"/>';
+    }
+    // bordas geométricas
+    linhasDecor += '<rect x="6" y="6" width="' + (W - 12) + '" height="' + (H - 12) + '" rx="2" fill="none" stroke="' + paleta.destaque + '" stroke-width="1" opacity="0.35"/>';
+    linhasDecor += '<rect x="10" y="10" width="' + (W - 20) + '" height="' + (H - 20) + '" rx="1" fill="none" stroke="' + paleta.destaque + '" stroke-width="0.5" opacity="0.2"/>';
+
+    // faixa do título
+    var tituloExibido = (titulo || 'Livro').length > 22 ? (titulo || 'Livro').slice(0, 20) + '…' : (titulo || 'Livro');
+    var faixaTitulo =
+      '<rect x="0" y="' + (H * 0.72) + '" width="' + W + '" height="' + (H * 0.28) + '" fill="' + paleta.escuro + '" opacity="0.82"/>' +
+      '<foreignObject x="8" y="' + (H * 0.73) + '" width="' + (W - 16) + '" height="' + (H * 0.26) + '">' +
+        '<div xmlns="http://www.w3.org/1999/xhtml" style="font-family:\'Hind\',sans-serif;font-size:10px;font-weight:700;color:' + paleta.destaque + ';line-height:1.25;word-break:break-word;text-align:center;padding-top:4px;">' +
+          tituloExibido +
+        '</div>' +
+      '</foreignObject>';
+
+    var svgNS = 'http://www.w3.org/2000/svg';
     var capa = document.createElement('div');
     capa.className = 'us-capa';
     capa.setAttribute('role', 'img');
     capa.setAttribute('aria-label', 'Capa de ' + (titulo || 'livro'));
-    capa.textContent = titulo || 'Livro';
+
+    var svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.setAttribute('xmlns', svgNS);
+
+    svg.innerHTML =
+      '<rect width="' + W + '" height="' + H + '" fill="' + paleta.fundo + '"/>' +
+      linhasDecor +
+      ILUSTRACOES[iluIdx](paleta, W, H) +
+      faixaTitulo;
+
+    capa.appendChild(svg);
     return capa;
   }
 
@@ -63,7 +211,7 @@
       capaLink.href = urlLivro(livro, false);
       capaLink.setAttribute('role', 'img');
       capaLink.setAttribute('aria-label', 'Capa de ' + (livro.titulo || 'livro'));
-      capaLink.textContent = livro.titulo || 'Livro';
+      capaLink.appendChild(montarCapa(livro.titulo, livro.categoria).querySelector('svg'));
       capaArea.appendChild(capaLink);
       artigo.appendChild(capaArea);
 
@@ -135,7 +283,7 @@
     var link = document.createElement('a');
     link.className = opcoes.linkClasse || 'us-card-livro__link';
     link.href = urlLivro(livro, false);
-    link.appendChild(montarCapa(livro.titulo));
+    link.appendChild(montarCapa(livro.titulo, livro.categoria));
 
     var titulo = document.createElement('h3');
     titulo.className = opcoes.tituloClasse || 'us-card-livro__titulo';
@@ -433,7 +581,7 @@
           destaque.querySelector('.us-progresso').setAttribute('aria-valuenow', String(pctDestaque));
           destaque.querySelector('.us-capa').href = urlLivro(primeiro, true);
           destaque.querySelector('.us-botao').href = urlLivro(primeiro, true);
-          destaque.querySelector('.us-capa').replaceChildren(montarCapa(primeiro.titulo));
+          destaque.querySelector('.us-capa').replaceChildren(montarCapa(primeiro.titulo, primeiro.categoria));
         } else {
           destaque.closest('section').hidden = true;
         }
@@ -446,7 +594,7 @@
         var capaLink = document.createElement('a');
         capaLink.className = 'us-capa';
         capaLink.href = urlLivro(livro, true);
-        capaLink.appendChild(montarCapa(livro.titulo));
+        capaLink.appendChild(montarCapa(livro.titulo, livro.categoria));
         card.appendChild(capaLink);
         var info = document.createElement('div');
         info.className = 'us-card-continuar__info';
@@ -525,7 +673,7 @@
           var link = document.createElement('a');
           link.className = 'us-capa-prat__link';
           link.href = urlLivro(livro, true);
-          link.appendChild(montarCapa(livro.titulo));
+          link.appendChild(montarCapa(livro.titulo, livro.categoria));
           var progresso = document.createElement('p');
           progresso.className = 'us-capa-prat__texto';
           progresso.textContent = (Number(livro.progresso) || 0) + '% lido';

@@ -239,6 +239,15 @@
   background-repeat: no-repeat;
   color: #294f52; font-size: calc(12px * var(--us-escala, 1)); line-height: 1.2; font-weight: 600;
 }
+/* Quando há SVG (capa art-deco gerada), remove o fundo padrão */
+.us-capa:has(svg) {
+  background: none !important;
+  padding: 0 !important;
+}
+.us-capa-item:has(svg) {
+  background: none !important;
+  padding: 0 !important;
+}
 .us-card-lista__capa-area .us-capa:not(:has(img)) { display: flex; }
 .us-capa--prateleira { width: 116px; }
 

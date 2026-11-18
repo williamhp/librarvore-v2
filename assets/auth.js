@@ -22,57 +22,111 @@
     return dados;
   }
 
+  // ── Recuperação de senha: passo 1 (e-mail) ──────────────────────────────────
   var formularioRecuperacao = document.getElementById('form-esqueci');
   if (formularioRecuperacao) {
-    var email = formularioRecuperacao.querySelector('input[type="email"]');
-    var erroEmail = document.getElementById('lg-erro-email');
-    var statusRecuperacao = formularioRecuperacao.querySelector('[data-form-status]');
-    var preenchimento = document.querySelector('[data-estado="preenchimento"]');
-    var confirmacao = document.querySelector('[data-estado="confirmacao"]');
-    var statusReenvio = confirmacao && confirmacao.querySelector('[data-form-status]');
+    var emailInput   = formularioRecuperacao.querySelector('input[type="email"]');
+    var erroEmail    = document.getElementById('lg-erro-email');
+    var statusEtapa1 = formularioRecuperacao.querySelector('[data-form-status]');
+    var estadoEmail  = document.querySelector('[data-estado="preenchimento"]');
+    var estadoCodigo = document.querySelector('[data-estado="verificacao"]');
 
     function validarEmail() {
-      var valido = EMAIL.test(email.value.trim());
+      var valido = EMAIL.test(emailInput.value.trim());
       if (erroEmail) erroEmail.hidden = valido;
-      email.setAttribute('aria-invalid', valido ? 'false' : 'true');
+      emailInput.setAttribute('aria-invalid', valido ? 'false' : 'true');
       return valido;
     }
 
-    email.addEventListener('input', validarEmail);
+    emailInput.addEventListener('input', validarEmail);
 
-    async function enviarLink(botao) {
-      if (!validarEmail()) {
-        email.focus();
+    formularioRecuperacao.addEventListener('submit', async function (evento) {
+      evento.preventDefault();
+      if (!validarEmail()) { emailInput.focus(); return; }
+
+      var botao = formularioRecuperacao.querySelector('[type="submit"]');
+      botao.disabled = true;
+      exibirStatus(statusEtapa1, '', false);
+
+      try {
+        await solicitarRecuperacao(emailInput.value.trim());
+        var destino = estadoCodigo && estadoCodigo.querySelector('[data-email-destino]');
+        if (destino) destino.textContent = emailInput.value.trim();
+        if (estadoEmail)  estadoEmail.hidden  = true;
+        if (estadoCodigo) estadoCodigo.hidden = false;
+        var codigoInput = document.getElementById('lg-codigo');
+        if (codigoInput) codigoInput.focus();
+      } catch (erro) {
+        exibirStatus(statusEtapa1, erro.message, true);
+      } finally {
+        botao.disabled = false;
+      }
+    });
+  }
+
+  // ── Recuperação de senha: passo 2 (código) ──────────────────────────────────
+  var formularioVerificacao = document.getElementById('form-verificacao');
+  if (formularioVerificacao) {
+    var codigoInput  = document.getElementById('lg-codigo');
+    var erroCodigo   = document.getElementById('lg-erro-codigo');
+    var statusEtapa2 = formularioVerificacao.querySelector('[data-form-status]');
+
+    codigoInput.addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, 6);
+      var valido = /^\d{6}$/.test(this.value);
+      if (erroCodigo) erroCodigo.hidden = valido || this.value.length === 0;
+      this.setAttribute('aria-invalid', valido ? 'false' : 'true');
+    });
+
+    formularioVerificacao.addEventListener('submit', async function (evento) {
+      evento.preventDefault();
+      var codigo = codigoInput.value.trim();
+      if (!/^\d{6}$/.test(codigo)) {
+        if (erroCodigo) erroCodigo.hidden = false;
+        codigoInput.setAttribute('aria-invalid', 'true');
+        codigoInput.focus();
         return;
       }
 
-      if (botao) botao.disabled = true;
-      exibirStatus(statusRecuperacao, '', false);
-      try {
-        await solicitarRecuperacao(email.value.trim());
-        if (preenchimento) preenchimento.hidden = true;
-        if (confirmacao) confirmacao.hidden = false;
-      } catch (erro) {
-        exibirStatus(statusRecuperacao, erro.message, true);
-      } finally {
-        if (botao) botao.disabled = false;
-      }
-    }
+      var botao = formularioVerificacao.querySelector('[type="submit"]');
+      botao.disabled = true;
+      exibirStatus(statusEtapa2, '', false);
 
-    formularioRecuperacao.addEventListener('submit', function (evento) {
-      evento.preventDefault();
-      enviarLink(formularioRecuperacao.querySelector('[type="submit"]'));
+      var emailEl  = document.getElementById('lg-email');
+      var emailVal = emailEl ? emailEl.value.trim() : '';
+
+      try {
+        var resposta = await fetch('/api/verificar-codigo', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailVal, codigo: codigo })
+        });
+        var dados = await resposta.json().catch(function () { return {}; });
+        if (!resposta.ok) throw new Error(dados.erro || 'Código inválido ou expirado.');
+        // Avança para o passo 3 na mesma página
+        document.querySelector('[data-estado="verificacao"]').hidden = true;
+        document.querySelector('[data-estado="nova-senha"]').hidden  = false;
+        document.getElementById('lg-nova').focus();
+      } catch (erro) {
+        exibirStatus(statusEtapa2, erro.message, true);
+      } finally {
+        botao.disabled = false;
+      }
     });
 
     var reenviar = document.querySelector('[data-acao="reenviar"]');
     if (reenviar) {
       reenviar.addEventListener('click', async function () {
         reenviar.disabled = true;
+        exibirStatus(statusEtapa2, '', false);
+        var emailEl  = document.getElementById('lg-email');
+        var emailVal = emailEl ? emailEl.value.trim() : '';
         try {
-          await solicitarRecuperacao(email.value.trim());
-          exibirStatus(statusReenvio, 'Se o e-mail estiver cadastrado, enviaremos outro link.', false);
+          await solicitarRecuperacao(emailVal);
+          exibirStatus(statusEtapa2, 'Código reenviado! Confira também a caixa de spam.', false);
         } catch (erro) {
-          exibirStatus(statusReenvio, erro.message, true);
+          exibirStatus(statusEtapa2, erro.message, true);
         } finally {
           reenviar.disabled = false;
         }
@@ -80,41 +134,46 @@
     }
   }
 
+  // ── Recuperação de senha: passo 3 (nova senha) ──────────────────────────────
   var formularioSenha = document.getElementById('form-nova-senha');
   if (formularioSenha) {
-    var token = new URLSearchParams(window.location.search).get('token') || '';
-    formularioSenha.elements.token.value = token;
-    var statusSenha = formularioSenha.querySelector('[data-form-status]');
-    var botaoSenha = formularioSenha.querySelector('[type="submit"]');
-    if (!token) {
-      exibirStatus(statusSenha, 'Link inválido. Solicite uma nova redefinição de senha.', true);
-      botaoSenha.disabled = true;
-    }
+    var erroConfirma = document.getElementById('lg-erro-confirma');
+    var statusEtapa3 = formularioSenha.querySelector('[data-form-status]');
+    var botaoSenha   = formularioSenha.querySelector('[type="submit"]');
 
     formularioSenha.addEventListener('submit', async function (evento) {
       evento.preventDefault();
-      if (formularioSenha.elements.nova_senha.value !== formularioSenha.elements.confirmar_senha.value) {
-        exibirStatus(statusSenha, 'A confirmação não corresponde à nova senha.', true);
+      var nova      = formularioSenha.elements.nova_senha.value;
+      var confirma  = formularioSenha.elements.confirmar_senha.value;
+
+      if (nova !== confirma) {
+        if (erroConfirma) erroConfirma.hidden = false;
+        formularioSenha.elements.confirmar_senha.setAttribute('aria-invalid', 'true');
+        formularioSenha.elements.confirmar_senha.focus();
         return;
       }
+      if (erroConfirma) erroConfirma.hidden = true;
+      formularioSenha.elements.confirmar_senha.setAttribute('aria-invalid', 'false');
+
+      var emailEl  = document.getElementById('lg-email');
+      var emailVal = emailEl ? emailEl.value.trim() : '';
 
       botaoSenha.disabled = true;
+      exibirStatus(statusEtapa3, '', false);
+
       try {
         var resposta = await fetch('/api/redefinir-senha', {
           method: 'POST',
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            token: token,
-            nova_senha: formularioSenha.elements.nova_senha.value
-          })
+          body: JSON.stringify({ email: emailVal, nova_senha: nova })
         });
         var dados = await resposta.json().catch(function () { return {}; });
         if (!resposta.ok) throw new Error(dados.erro || 'Não foi possível redefinir a senha.');
-        document.querySelector('[data-estado="nova-senha"]').hidden = true;
+        document.querySelector('[data-estado="nova-senha"]').hidden      = true;
         document.querySelector('[data-estado="senha-redefinida"]').hidden = false;
       } catch (erro) {
-        exibirStatus(statusSenha, erro.message, true);
+        exibirStatus(statusEtapa3, erro.message, true);
       } finally {
         botaoSenha.disabled = false;
       }

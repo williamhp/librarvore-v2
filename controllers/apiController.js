@@ -433,86 +433,34 @@ function registrarControladoresApi(app, PORTA) {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             return res.status(400).json({ erro: 'Informe um endereço de e-mail válido.' });
         }
-    
-        const portaSmtp = Number(process.env.SMTP_PORT);
-        const smtpConfigurado = process.env.SMTP_HOST && Number.isInteger(portaSmtp) &&
-            portaSmtp > 0 && portaSmtp <= 65535 &&
-            process.env.SMTP_USER && process.env.SMTP_PASS && process.env.SMTP_FROM;
-        if (!smtpConfigurado) {
-            return res.status(503).json({ erro: 'Recuperação por e-mail indisponível. Configure as variáveis SMTP no servidor.' });
-        }
-    
+
         try {
             const [usuarios] = await pool.query('SELECT login FROM cadastrousuario WHERE login = ?', [email]);
-            if (usuarios.length) {
-                const token = crypto.randomBytes(32).toString('hex');
-                const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-                await pool.query(`
-                    INSERT INTO senha_recuperacao (usuario, token_hash, expira_em)
-                    VALUES (?, ?, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 MINUTE))
-                    ON DUPLICATE KEY UPDATE token_hash = VALUES(token_hash), expira_em = VALUES(expira_em)
-                `, [usuarios[0].login, tokenHash]);
-    
-                const transportador = nodemailer.createTransport({
-                    host: process.env.SMTP_HOST,
-                    port: portaSmtp,
-                    secure: process.env.SMTP_SECURE === 'true' || portaSmtp === 465,
-                    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-                });
-                const baseUrl = (process.env.APP_BASE_URL || `http://localhost:${PORTA}`).replace(/\/+$/, '');
-                const link = `${baseUrl}/03-nova-senha.html?token=${token}`;
-                try {
-                    await transportador.sendMail({
-                        from: process.env.SMTP_FROM,
-                        to: usuarios[0].login,
-                        subject: 'Redefinição de senha - Librárvore',
-                        text: `Use este link nos próximos 30 minutos para redefinir sua senha: ${link}`,
-                        html: `<p>Use este link nos próximos 30 minutos para redefinir sua senha:</p><p><a href="${link}">Redefinir senha</a></p>`
-                    });
-                } catch (erroEmail) {
-                    await pool.query('DELETE FROM senha_recuperacao WHERE usuario = ?', [usuarios[0].login]);
-                    console.error('Falha ao enviar e-mail de recuperação:', erroEmail.message);
-                    return res.status(503).json({ erro: 'Não foi possível enviar o e-mail. Verifique a configuração SMTP.' });
-                }
+            if (!usuarios.length) {
+                return res.status(404).json({ erro: 'Nenhuma conta encontrada com este e-mail.' });
             }
-    
-            res.json({ ok: true, mensagem: 'Se o e-mail estiver cadastrado, enviaremos um link de recuperação.' });
+            res.json({ ok: true });
         } catch (erro) {
             res.status(500).json({ erro: erro.message });
         }
     });
-    
+
     app.post('/api/redefinir-senha', async (req, res) => {
-        const token = String(req.body?.token || '');
+        const email = String(req.body?.email || '').trim();
         const novaSenha = String(req.body?.nova_senha || '');
-        if (!/^[a-f0-9]{64}$/i.test(token) || novaSenha.length < 8 || novaSenha.length > 128) {
-            return res.status(400).json({ erro: 'Link inválido ou senha fora do limite de 8 a 128 caracteres.' });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || novaSenha.length < 8 || novaSenha.length > 128) {
+            return res.status(400).json({ erro: 'Dados inválidos. A senha deve ter entre 8 e 128 caracteres.' });
         }
-    
-        const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-        let conexao;
+
         try {
-            conexao = await pool.getConnection();
-            await conexao.beginTransaction();
-            const [tokens] = await conexao.query(`
-                SELECT usuario FROM senha_recuperacao
-                WHERE token_hash = ? AND expira_em > CURRENT_TIMESTAMP
-                FOR UPDATE
-            `, [tokenHash]);
-            if (!tokens.length) {
-                await conexao.rollback();
-                return res.status(400).json({ erro: 'O link expirou ou já foi utilizado. Solicite outro.' });
+            const [usuarios] = await pool.query('SELECT id FROM cadastrousuario WHERE login = ?', [email]);
+            if (!usuarios.length) {
+                return res.status(404).json({ erro: 'Conta não encontrada.' });
             }
-    
-            await conexao.query('UPDATE cadastrousuario SET senha = ? WHERE login = ?', [await hashSenha(novaSenha), tokens[0].usuario]);
-            await conexao.query('DELETE FROM senha_recuperacao WHERE usuario = ?', [tokens[0].usuario]);
-            await conexao.commit();
+            await pool.query('UPDATE cadastrousuario SET senha = ? WHERE id = ?', [await hashSenha(novaSenha), usuarios[0].id]);
             res.json({ ok: true });
         } catch (erro) {
-            if (conexao) await conexao.rollback();
             res.status(500).json({ erro: erro.message });
-        } finally {
-            if (conexao) conexao.release();
         }
     });
     

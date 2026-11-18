@@ -46,7 +46,7 @@
       <!-- Estado 1: informar e-mail -->
       <div data-estado="preenchimento">
         <h1 class="lg-card__titulo" id="lg-titulo">Esqueceu sua senha?</h1>
-        <p class="lg-texto">Informe o e-mail cadastrado para receber o código de verificação.</p>
+        <p class="lg-texto">Informe o e-mail cadastrado e enviaremos as instruções para redefinir a sua senha.</p>
         <form class="lg-form" id="form-esqueci" action="#" method="post" novalidate>
           <div class="lg-campo" data-campo>
             <label class="lg-sr-only" for="lg-email">E-mail cadastrado</label>
@@ -58,78 +58,9 @@
             <span>Informe um e-mail válido, por exemplo: nome@exemplo.com.</span>
           </p>
           <p class="lg-texto" role="status" data-form-status></p>
-          <button class="lg-botao" type="submit">Enviar código</button>
+          <button class="lg-botao" type="submit">Continuar</button>
           <a class="lg-link-voltar" href="01-login.html">Voltar para o login</a>
         </form>
-      </div>
-
-      <!-- Estado 2: inserir código recebido por e-mail -->
-      <div data-estado="verificacao" hidden>
-        <div class="lg-confirmacao-icone">
-          <svg viewBox="0 0 36 36" width="36" height="36" aria-hidden="true" focusable="false"><rect x="3" y="7" width="30" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 9l14 10L32 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h1 class="lg-card__titulo">Verifique seu e-mail</h1>
-        <p class="lg-texto">Enviamos um código de 6 dígitos para <strong data-email-destino></strong>. Digite-o abaixo para confirmar que a conta é sua.</p>
-        <form class="lg-form" id="form-verificacao" action="#" method="post" novalidate>
-          <div class="lg-campo" data-campo>
-            <label class="lg-sr-only" for="lg-codigo">Código de verificação</label>
-            <input class="lg-campo__input" type="text" id="lg-codigo" name="codigo"
-                   placeholder="Código de 6 dígitos"
-                   inputmode="numeric" pattern="\d{6}" maxlength="6"
-                   autocomplete="one-time-code" required
-                   aria-describedby="lg-erro-codigo" aria-invalid="false">
-            <svg class="lg-campo__icone" viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false">
-              <rect x="1" y="5" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M6 11h10M6 15h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <p class="lg-erro" id="lg-erro-codigo" role="alert" hidden>
-            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5v4M8 11h.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            <span>Informe o código de 6 dígitos enviado para o seu e-mail.</span>
-          </p>
-          <p class="lg-texto" role="status" data-form-status></p>
-          <button class="lg-botao" type="submit">Confirmar código</button>
-          <button class="lg-link-texto" type="button" data-acao="reenviar">Não recebeu? Reenviar código</button>
-          <a class="lg-link-voltar" href="01-login.html">Voltar para o login</a>
-        </form>
-      </div>
-
-      <!-- Estado 3: criar nova senha -->
-      <div data-estado="nova-senha" hidden>
-        <h1 class="lg-card__titulo">Crie uma nova senha</h1>
-        <p class="lg-texto">Escolha uma senha nova para acessar a sua conta.</p>
-        <form class="lg-form" id="form-nova-senha" action="#" method="post" novalidate>
-          <div class="lg-campo">
-            <label class="lg-sr-only" for="lg-nova">Nova senha</label>
-            <input class="lg-campo__input" type="password" id="lg-nova" name="nova_senha"
-                   placeholder="Nova senha" autocomplete="new-password"
-                   minlength="8" maxlength="128" required
-                   aria-describedby="lg-erro-nova" aria-invalid="false">
-            <svg class="lg-campo__icone lg-campo__icone--senha" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true" focusable="false"><path d="M5.5 13V9a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.75" y="13" width="16.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="19" r="1.6" fill="currentColor"/></svg>
-          </div>
-          <div class="lg-campo">
-            <label class="lg-sr-only" for="lg-confirma">Confirmar nova senha</label>
-            <input class="lg-campo__input" type="password" id="lg-confirma" name="confirmar_senha"
-                   placeholder="Confirmar nova senha" autocomplete="new-password"
-                   minlength="8" maxlength="128" required
-                   aria-describedby="lg-erro-confirma" aria-invalid="false">
-            <svg class="lg-campo__icone lg-campo__icone--senha" viewBox="0 0 22 30" width="22" height="30" aria-hidden="true" focusable="false"><path d="M5.5 13V9a5.5 5.5 0 0 1 11 0v4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.75" y="13" width="16.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="19" r="1.6" fill="currentColor"/></svg>
-          </div>
-          <p class="lg-erro" id="lg-erro-confirma" role="alert" hidden>
-            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5v4M8 11h.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            <span>A confirmação não corresponde à nova senha.</span>
-          </p>
-          <p class="lg-texto" role="status" data-form-status></p>
-          <button class="lg-botao" type="submit">Redefinir senha</button>
-          <a class="lg-link-voltar" href="01-login.html">Voltar para o login</a>
-        </form>
-      </div>
-
-      <!-- Estado 4: senha redefinida com sucesso -->
-      <div data-estado="senha-redefinida" hidden>
-        <h1 class="lg-card__titulo">Senha alterada</h1>
-        <p class="lg-texto">Sua senha foi redefinida com sucesso. Entre novamente com a nova senha.</p>
-        <a class="lg-botao" href="01-login.html">Ir para o login</a>
       </div>
 
     </section>

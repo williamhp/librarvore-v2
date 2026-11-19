@@ -40,96 +40,151 @@
     return (telaLeitura ? '09-leitura.html?' : '08-detalhes-livro.html?') + params.toString();
   }
 
-  // ── Capas reais via Google Books API ────────────────────────────────────────
-  var _capaCache = {};
+  // ── Capas Art Deco — SVG ilustrativo por título/categoria ───────────────────
+  var _PALETAS = [
+    { f: '#7b1a1a', d: '#e8c97a', c: '#f5e9c8', e: '#4a0f0f' },
+    { f: '#1a3a4a', d: '#d4a94a', c: '#e8dfc0', e: '#0d1f28' },
+    { f: '#2a4a1a', d: '#d9c86a', c: '#eae5c0', e: '#152510' },
+    { f: '#4a2a0a', d: '#e8c87a', c: '#f5e8c5', e: '#2a1505' },
+    { f: '#1a1a4a', d: '#c8a8e8', c: '#e5daf5', e: '#0d0d28' },
+    { f: '#3a1a4a', d: '#e8c87a', c: '#f0e5c8', e: '#1e0d28' },
+    { f: '#4a3a0a', d: '#e0d060', c: '#f0eab8', e: '#281f05' },
+    { f: '#1a3a2a', d: '#a8d8b8', c: '#d8ede0', e: '#0d1e16' },
+  ];
 
-  function montarCapa(titulo, categoria, isbn) {
+  var _ILUS = [
+    // 0 — olho (distopia/vigilância)
+    function (p, W, H) {
+      var cx = W/2, cy = H*0.38, rx = W*0.32, ry = H*0.14;
+      return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="none" stroke="'+p.d+'" stroke-width="2.5"/>'
+           + '<circle cx="'+cx+'" cy="'+cy+'" r="'+(ry*0.55)+'" fill="'+p.d+'"/>'
+           + '<circle cx="'+cx+'" cy="'+cy+'" r="'+(ry*0.25)+'" fill="'+p.e+'"/>'
+           + '<line x1="'+(cx-rx)+'" y1="'+cy+'" x2="'+(cx+rx)+'" y2="'+cy+'" stroke="'+p.d+'" stroke-width="1" opacity="0.4"/>';
+    },
+    // 1 — navio (aventura/história)
+    function (p, W, H) {
+      var cx = W/2, b = H*0.58;
+      return '<path d="M'+(cx-W*0.3)+' '+b+' Q'+cx+' '+(b+H*0.1)+' '+(cx+W*0.3)+' '+b+' Z" fill="'+p.d+'"/>'
+           + '<line x1="'+cx+'" y1="'+(b-H*0.35)+'" x2="'+cx+'" y2="'+b+'" stroke="'+p.c+'" stroke-width="2"/>'
+           + '<path d="M'+cx+' '+(b-H*0.33)+' L'+(cx+W*0.22)+' '+(b-H*0.15)+' L'+cx+' '+(b-H*0.1)+' Z" fill="'+p.c+'"/>'
+           + '<path d="M'+cx+' '+(b-H*0.33)+' L'+(cx-W*0.18)+' '+(b-H*0.18)+' L'+cx+' '+(b-H*0.12)+' Z" fill="'+p.c+'" opacity="0.7"/>';
+    },
+    // 2 — megafone (política/negócios)
+    function (p, W, H) {
+      var cx = W/2, cy = H*0.38;
+      return '<rect x="'+(cx-W*0.08)+'" y="'+(cy-H*0.08)+'" width="'+(W*0.16)+'" height="'+(H*0.2)+'" rx="3" fill="'+p.d+'"/>'
+           + '<path d="M'+(cx+W*0.08)+' '+(cy-H*0.06)+' L'+(cx+W*0.28)+' '+(cy-H*0.18)+' L'+(cx+W*0.28)+' '+(cy+H*0.14)+' L'+(cx+W*0.08)+' '+(cy+H*0.12)+' Z" fill="'+p.d+'"/>'
+           + '<path d="M'+(cx+W*0.28)+' '+(cy-H*0.08)+' Q'+(cx+W*0.4)+' '+cy+' '+(cx+W*0.28)+' '+(cy+H*0.08)+'" fill="none" stroke="'+p.c+'" stroke-width="2"/>'
+           + '<line x1="'+(cx-W*0.08)+'" y1="'+(cy+H*0.12)+'" x2="'+(cx-W*0.08)+'" y2="'+(cy+H*0.26)+'" stroke="'+p.d+'" stroke-width="4"/>';
+    },
+    // 3 — colunas (clássico/filosofia)
+    function (p, W, H) {
+      var base = H*0.62, topo = H*0.2, col = W/5, r = '';
+      for (var i = 1; i <= 3; i++) {
+        var x = col*i - col*0.08, op = i===2 ? '1' : '0.75';
+        r += '<rect x="'+x+'" y="'+topo+'" width="'+(col*0.16)+'" height="'+(base-topo)+'" fill="'+p.d+'" opacity="'+op+'"/>'
+           + '<rect x="'+(x-col*0.04)+'" y="'+topo+'" width="'+(col*0.24)+'" height="'+(H*0.04)+'" fill="'+p.d+'" opacity="'+op+'"/>'
+           + '<rect x="'+(x-col*0.04)+'" y="'+(base-H*0.04)+'" width="'+(col*0.24)+'" height="'+(H*0.04)+'" fill="'+p.d+'" opacity="'+op+'"/>';
+      }
+      return r + '<line x1="'+(W*0.1)+'" y1="'+base+'" x2="'+(W*0.9)+'" y2="'+base+'" stroke="'+p.d+'" stroke-width="2"/>';
+    },
+    // 4 — montanha/sol (aventura/ficção)
+    function (p, W, H) {
+      var base = H*0.62;
+      return '<path d="M0 '+base+' L'+(W*0.3)+' '+(H*0.22)+' L'+(W*0.55)+' '+(H*0.42)+' L'+(W*0.7)+' '+(H*0.3)+' L'+W+' '+base+' Z" fill="'+p.d+'" opacity="0.85"/>'
+           + '<circle cx="'+(W*0.75)+'" cy="'+(H*0.2)+'" r="'+(W*0.1)+'" fill="'+p.d+'" opacity="0.6"/>'
+           + '<path d="M'+(W*0.28)+' '+(H*0.25)+' L'+(W*0.32)+' '+(H*0.25)+' L'+(W*0.3)+' '+(H*0.21)+' Z" fill="'+p.c+'"/>';
+    },
+    // 5 — livro aberto (literatura/poesia)
+    function (p, W, H) {
+      var cx = W/2, cy = H*0.38;
+      return '<path d="M'+(cx-W*0.3)+' '+(cy-H*0.18)+' L'+(cx-W*0.02)+' '+(cy-H*0.1)+' L'+(cx-W*0.02)+' '+(cy+H*0.18)+' L'+(cx-W*0.3)+' '+(cy+H*0.1)+' Z" fill="'+p.d+'"/>'
+           + '<path d="M'+(cx+W*0.3)+' '+(cy-H*0.18)+' L'+(cx+W*0.02)+' '+(cy-H*0.1)+' L'+(cx+W*0.02)+' '+(cy+H*0.18)+' L'+(cx+W*0.3)+' '+(cy+H*0.1)+' Z" fill="'+p.d+'" opacity="0.8"/>'
+           + '<line x1="'+cx+'" y1="'+(cy-H*0.1)+'" x2="'+cx+'" y2="'+(cy+H*0.18)+'" stroke="'+p.c+'" stroke-width="1.5"/>'
+           + '<line x1="'+(cx-W*0.24)+'" y1="'+(cy-H*0.06)+'" x2="'+(cx-W*0.06)+'" y2="'+(cy-H*0.02)+'" stroke="'+p.f+'" stroke-width="1" opacity="0.5"/>'
+           + '<line x1="'+(cx-W*0.24)+'" y1="'+(cy+H*0.02)+'" x2="'+(cx-W*0.06)+'" y2="'+(cy+H*0.05)+'" stroke="'+p.f+'" stroke-width="1" opacity="0.5"/>';
+    },
+    // 6 — crânio (terror/suspense)
+    function (p, W, H) {
+      var cx = W/2, cy = H*0.35;
+      return '<ellipse cx="'+cx+'" cy="'+(cy-H*0.02)+'" rx="'+(W*0.22)+'" ry="'+(H*0.2)+'" fill="'+p.d+'"/>'
+           + '<rect x="'+(cx-W*0.14)+'" y="'+(cy+H*0.15)+'" width="'+(W*0.28)+'" height="'+(H*0.08)+'" rx="3" fill="'+p.d+'"/>'
+           + '<rect x="'+(cx-W*0.09)+'" y="'+(cy+H*0.15)+'" width="'+(W*0.06)+'" height="'+(H*0.1)+'" fill="'+p.f+'"/>'
+           + '<rect x="'+(cx-W*0.01)+'" y="'+(cy+H*0.15)+'" width="'+(W*0.06)+'" height="'+(H*0.1)+'" fill="'+p.f+'"/>'
+           + '<ellipse cx="'+(cx-W*0.09)+'" cy="'+(cy-H*0.02)+'" rx="'+(W*0.07)+'" ry="'+(H*0.07)+'" fill="'+p.f+'"/>'
+           + '<ellipse cx="'+(cx+W*0.09)+'" cy="'+(cy-H*0.02)+'" rx="'+(W*0.07)+'" ry="'+(H*0.07)+'" fill="'+p.f+'"/>';
+    },
+    // 7 — foguete/planeta (ficção científica/fantasia)
+    function (p, W, H) {
+      var cx = W/2, cy = H*0.4;
+      return '<ellipse cx="'+(cx+W*0.2)+'" cy="'+(H*0.22)+'" rx="'+(W*0.14)+'" ry="'+(H*0.07)+'" fill="none" stroke="'+p.d+'" stroke-width="1.5" opacity="0.6"/>'
+           + '<path d="M'+cx+' '+(cy-H*0.22)+' Q'+(cx+W*0.1)+' '+(cy-H*0.1)+' '+(cx+W*0.08)+' '+(cy+H*0.12)+' L'+(cx-W*0.08)+' '+(cy+H*0.12)+' Q'+(cx-W*0.1)+' '+(cy-H*0.1)+' '+cx+' '+(cy-H*0.22)+' Z" fill="'+p.d+'"/>'
+           + '<path d="M'+(cx-W*0.08)+' '+(cy+H*0.08)+' L'+(cx-W*0.18)+' '+(cy+H*0.18)+' L'+(cx-W*0.02)+' '+(cy+H*0.12)+' Z" fill="'+p.d+'" opacity="0.7"/>'
+           + '<path d="M'+(cx+W*0.08)+' '+(cy+H*0.08)+' L'+(cx+W*0.18)+' '+(cy+H*0.18)+' L'+(cx+W*0.02)+' '+(cy+H*0.12)+' Z" fill="'+p.d+'" opacity="0.7"/>'
+           + '<circle cx="'+cx+'" cy="'+(cy-H*0.02)+'" r="'+(W*0.06)+'" fill="'+p.f+'" stroke="'+p.c+'" stroke-width="1.5"/>';
+    },
+  ];
+
+  function _hashTitulo(s) {
+    var h = 0;
+    for (var i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+
+  function montarCapa(titulo, categoria) {
+    var t = (titulo || 'Livro').toLowerCase();
+    var hash = _hashTitulo(t);
+    var p = _PALETAS[hash % _PALETAS.length];
+
+    // escolhe ilustração por palavra-chave, senão por hash
+    var idx = hash % _ILUS.length;
+    if (/1984|distopia|vigil|polit|revol|fahrenheit|laranja|conto da aia|animal farm/.test(t))           idx = 0;
+    else if (/navio|mar|pirat|oceano|explorac|aventur|riqueza|naç|odisseia/.test(t))                      idx = 1;
+    else if (/administr|marketing|negoci|gestão|empresa|lider|economía|economia/.test(t))                  idx = 2;
+    else if (/filosofi|socrat|plat|arist|direito|tratado|teoria|classic|ensaio/.test(t + (categoria||'')))idx = 3;
+    else if (/dun|fundac|hobbit|senhor|espaç|mochil|galáxia|solaris|neuromancer/.test(t))                 idx = 7;
+    else if (/ilumina|cemitér|dracul|frankenstein|corali|terror|horror|assombr/.test(t))                  idx = 6;
+    else if (/guerra|tronos|nome do vento|silmarillion|harry|brux|magia|feitiç/.test(t))                  idx = 4;
+    else if (/dom casmurro|orgulho|anna|senhora|guarani|iracema|cortiç|macuna|vidas|poesia|liter/.test(t)) idx = 5;
+    else if (/crime|castigo|silencio|codigo|anjos|garota|rosa|detetiv|assassin|misterio/.test(t))          idx = 0;
+
+    var W = 124, H = 186;
+
+    // linhas decorativas Art Deco
+    var deco = '';
+    for (var i = 0; i < 4; i++) {
+      var y = H*0.06 + i*H*0.022;
+      deco += '<line x1="'+(W*0.08)+'" y1="'+y+'" x2="'+(W*0.92)+'" y2="'+y+'" stroke="'+p.d+'" stroke-width="0.5" opacity="0.18"/>';
+    }
+    deco += '<rect x="5" y="5" width="'+(W-10)+'" height="'+(H-10)+'" rx="2" fill="none" stroke="'+p.d+'" stroke-width="0.9" opacity="0.3"/>';
+
+    // faixa do título na base
+    var textoTitulo = titulo || 'Livro';
+    if (textoTitulo.length > 24) textoTitulo = textoTitulo.slice(0, 22) + '…';
+    // escapa caracteres especiais para SVG
+    textoTitulo = textoTitulo.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    var linhas = textoTitulo.length > 14 ? [textoTitulo.slice(0, Math.ceil(textoTitulo.length/2)), textoTitulo.slice(Math.ceil(textoTitulo.length/2))] : [textoTitulo];
+    var faixaH = H * (linhas.length > 1 ? 0.22 : 0.16);
+    var faixaY = H - faixaH;
+    var textoSvg = linhas.map(function (linha, li) {
+      return '<text x="'+(W/2)+'" y="'+(faixaY + faixaH*0.38 + li*faixaH*0.42)+'" text-anchor="middle" dominant-baseline="middle" font-family="Hind,sans-serif" font-size="9.5" font-weight="700" fill="'+p.d+'">'+linha+'</text>';
+    }).join('');
+
+    var faixa = '<rect x="0" y="'+faixaY+'" width="'+W+'" height="'+faixaH+'" fill="'+p.e+'" opacity="0.88"/>'+textoSvg;
+
+    var svg = '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="display:block">'
+            + '<rect width="'+W+'" height="'+H+'" fill="'+p.f+'"/>'
+            + deco
+            + _ILUS[idx](p, W, H)
+            + faixa
+            + '</svg>';
+
     var capa = document.createElement('div');
     capa.className = 'us-capa';
     capa.setAttribute('role', 'img');
     capa.setAttribute('aria-label', 'Capa de ' + (titulo || 'livro'));
-
-    // placeholder enquanto carrega
-    capa.dataset.capaStatus = 'carregando';
-
-    var img = document.createElement('img');
-    img.alt = titulo || 'Capa do livro';
-    img.style.opacity = '0';
-    img.style.transition = 'opacity 0.3s ease';
-    img.addEventListener('load', function () {
-      img.style.opacity = '1';
-      capa.dataset.capaStatus = 'ok';
-    });
-    img.addEventListener('error', function () {
-      capa.dataset.capaStatus = 'erro';
-      capa.removeChild(img);
-      capa.textContent = titulo || 'Livro';
-    });
-    capa.appendChild(img);
-
-    // chave de busca: prefere ISBN, senão título
-    var chave = (isbn || titulo || '').trim();
-    if (!chave) { capa.textContent = titulo || 'Livro'; return capa; }
-
-    if (_capaCache[chave]) {
-      img.src = _capaCache[chave];
-      return capa;
-    }
-
-    var query = isbn
-      ? 'isbn:' + isbn
-      : encodeURIComponent('"' + titulo + '"');
-    var url = 'https://www.googleapis.com/books/v1/volumes?q=' + query
-            + '&maxResults=1&fields=items(volumeInfo/imageLinks)&langRestrict=pt';
-
-    fetch(url)
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        var links = d.items && d.items[0] && d.items[0].volumeInfo.imageLinks;
-        var src = links && (links.thumbnail || links.smallThumbnail);
-        if (src) {
-          // força HTTPS e pede zoom maior
-          src = src.replace('http://', 'https://').replace('zoom=1', 'zoom=2');
-          _capaCache[chave] = src;
-          img.src = src;
-        } else {
-          // fallback: busca só pelo título sem restrição de idioma
-          if (isbn) {
-            fetch('https://www.googleapis.com/books/v1/volumes?q='
-              + encodeURIComponent('"' + titulo + '"')
-              + '&maxResults=1&fields=items(volumeInfo/imageLinks)')
-              .then(function (r2) { return r2.json(); })
-              .then(function (d2) {
-                var l2 = d2.items && d2.items[0] && d2.items[0].volumeInfo.imageLinks;
-                var s2 = l2 && (l2.thumbnail || l2.smallThumbnail);
-                if (s2) {
-                  s2 = s2.replace('http://', 'https://').replace('zoom=1', 'zoom=2');
-                  _capaCache[chave] = s2;
-                  img.src = s2;
-                } else {
-                  capa.dataset.capaStatus = 'erro';
-                  if (capa.contains(img)) capa.removeChild(img);
-                  capa.textContent = titulo || 'Livro';
-                }
-              })
-              .catch(function () {
-                capa.dataset.capaStatus = 'erro';
-                if (capa.contains(img)) capa.removeChild(img);
-                capa.textContent = titulo || 'Livro';
-              });
-          } else {
-            capa.dataset.capaStatus = 'erro';
-            if (capa.contains(img)) capa.removeChild(img);
-            capa.textContent = titulo || 'Livro';
-          }
-        }
-      })
-      .catch(function () {
-        capa.dataset.capaStatus = 'erro';
-        if (capa.contains(img)) capa.removeChild(img);
-        capa.textContent = titulo || 'Livro';
-      });
-
+    capa.innerHTML = svg;
     return capa;
   }
 
@@ -147,7 +202,8 @@
       capaLink.href = urlLivro(livro, false);
       capaLink.setAttribute('role', 'img');
       capaLink.setAttribute('aria-label', 'Capa de ' + (livro.titulo || 'livro'));
-      capaLink.appendChild(montarCapa(livro.titulo, livro.categoria).querySelector('svg'));
+      var svgCapa = montarCapa(livro.titulo, livro.categoria).querySelector('svg');
+      if (svgCapa) capaLink.appendChild(svgCapa);
       capaArea.appendChild(capaLink);
       artigo.appendChild(capaArea);
 
@@ -219,7 +275,7 @@
     var link = document.createElement('a');
     link.className = opcoes.linkClasse || 'us-card-livro__link';
     link.href = urlLivro(livro, false);
-    link.appendChild(montarCapa(livro.titulo, livro.categoria, livro.isbn));
+    link.appendChild(montarCapa(livro.titulo, livro.categoria));
 
     var titulo = document.createElement('h3');
     titulo.className = opcoes.tituloClasse || 'us-card-livro__titulo';
@@ -517,7 +573,11 @@
           destaque.querySelector('.us-progresso').setAttribute('aria-valuenow', String(pctDestaque));
           destaque.querySelector('.us-capa').href = urlLivro(primeiro, true);
           destaque.querySelector('.us-botao').href = urlLivro(primeiro, true);
-          destaque.querySelector('.us-capa').replaceChildren(montarCapa(primeiro.titulo, primeiro.categoria, primeiro.isbn).firstChild);
+          var capaDestaque = destaque.querySelector('.us-capa');
+          capaDestaque.setAttribute('aria-label', 'Capa de ' + (primeiro.titulo || 'livro'));
+          var svgDestaque = montarCapa(primeiro.titulo, primeiro.categoria).querySelector('svg');
+          capaDestaque.replaceChildren();
+          if (svgDestaque) capaDestaque.appendChild(svgDestaque);
         } else {
           destaque.closest('section').hidden = true;
         }
@@ -609,7 +669,7 @@
           var link = document.createElement('a');
           link.className = 'us-capa-prat__link';
           link.href = urlLivro(livro, true);
-          link.appendChild(montarCapa(livro.titulo, livro.categoria, livro.isbn));
+          link.appendChild(montarCapa(livro.titulo, livro.categoria));
           var progresso = document.createElement('p');
           progresso.className = 'us-capa-prat__texto';
           progresso.textContent = (Number(livro.progresso) || 0) + '% lido';

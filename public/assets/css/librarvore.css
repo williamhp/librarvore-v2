@@ -1,4 +1,3 @@
-librarvore.css
 /* =========================================================
    Librárvore - Tela do Usuário (Figma: Tela_Usuario_v2, node 203:5)
    Todas as classes usam o prefixo "us-" para não conflitar
@@ -34,6 +33,7 @@ librarvore.css
   --us-largura-menu: 223px;
   --us-margem: 54px;
 }
+
 .us-page, .us-page *, .us-page *::before, .us-page *::after { box-sizing: border-box; }
 .us-page [hidden] { display: none !important; }
 
@@ -227,7 +227,7 @@ librarvore.css
   border-radius: 4px; background: var(--us-capa); overflow: hidden;
 }
 .us-capa img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.us-capa:not(:has(img)) {
+.us-capa:not(:has(img)):not(:has(svg)) {
   position: relative; display: flex; align-items: center; justify-content: center;
   padding: 28px 8px; text-align: center;
   background-color: #e5dfbf;
@@ -240,7 +240,9 @@ librarvore.css
   background-repeat: no-repeat;
   color: #294f52; font-size: calc(12px * var(--us-escala, 1)); line-height: 1.2; font-weight: 600;
 }
-.us-card-lista__capa-area .us-capa:not(:has(img)) { display: flex; }
+.us-capa:has(svg) { background: none !important; padding: 0 !important; }
+.us-capa svg { display: block; width: 100%; height: 100%; }
+.us-card-lista__capa-area .us-capa:not(:has(img)):not(:has(svg)) { display: flex; }
 .us-capa--prateleira { width: 116px; }
 
 .us-avaliacao { display: flex; align-items: center; gap: 2px; }
@@ -317,3 +319,4 @@ librarvore.css
   .us-busca { width: 100%; }
   .us-rodape__linha { flex-direction: column; align-items: flex-start; }
 }
+
